@@ -1,0 +1,3 @@
+# Bingo frontend
+
+This is the frontend for the Bingo multiplayer game.
