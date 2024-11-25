@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+input {
+    @apply bg-gray-200 px-3 py-2 rounded-md border-[1px] border-gray-500;
+}
+
+button {
+    @apply bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 shadow-md;
+}
