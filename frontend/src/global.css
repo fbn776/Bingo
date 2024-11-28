@@ -1,6 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Meow+Script&family=Pacifico&family=Poppins&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    height: 100dvh;
+}
+
+#root {
+    height: 100%;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-image: linear-gradient(#d0803f 2px, transparent 2px), linear-gradient(to right, #d0803f 2px, transparent 2px);
+    background-size: 32px 32px;
+    background-color: #ffd667;
+}
+
+.bungee-spice-regular {
+    font-family: "Bungee Spice", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.meow-script-regular {
+    font-family: "Meow Script", serif;
+    font-weight: 400;
+    font-style: normal;
+}
 
 
 input {
