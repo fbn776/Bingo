@@ -1,0 +1,8 @@
+.button {
+    @apply text-white rounded-md px-4 py-2 text-center
+}
+
+.primary-button {
+    @apply bg-custom-primary button hover:scale-110;
+}
+
