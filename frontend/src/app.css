@@ -6,3 +6,27 @@
     @apply bg-custom-primary button hover:scale-110;
 }
 
+
+.game-board {
+    @apply rounded-lg bg-white overflow-hidden shadow-xl border-4;
+}
+
+.game-board button {
+    @apply text-center text-3xl p-6 border-2 hover:bg-blue-200 max-sm:p-5 max-sm:text-2xl;
+}
+
+.game-board button:nth-child(-n+5) {
+    @apply border-t-0
+}
+
+.game-board button:nth-last-child(-n+5) {
+    @apply border-b-0
+}
+
+.game-board button:nth-child(5n) {
+    @apply border-r-0
+}
+
+.game-board button:nth-child(5n+1) {
+    @apply border-l-0
+}
