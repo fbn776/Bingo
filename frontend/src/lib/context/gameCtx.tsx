@@ -3,7 +3,9 @@ import {StateSetter} from "@/lib/types.ts";
 import {useLocalStorage} from "usehooks-ts";
 import {STORE_KEY} from "@/lib/data.ts";
 
-type TBoard = {title: string, board: number[], timestamp: number};
+/** Represents a board in storage */
+export type TBoard = {title: string, board: number[], timestamp: number};
+
 interface TGameCtx {
     username: string | null;
     setUsername: StateSetter<string | null>;
