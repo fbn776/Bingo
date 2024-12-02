@@ -30,3 +30,15 @@ export function copyText(text: string) {
         toast.error("Failed to copy to clipboard");
     });
 }
+
+/**
+ * Shuffle an array (based on Fisher-Yates Shuffle Algorithm)
+ * @param array
+ */
+export function shuffleArray<T>(array: T[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const index = Math.floor(Math.random() * (i + 1));
+        [array[i], array[index]] = [array[index], array[i]];
+    }
+    return array;
+}

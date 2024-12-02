@@ -9,18 +9,30 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 
-export function CustomDialog({open, setOpen, title, description, children}: {
+export function CustomDialog({
+                                 open,
+                                 setOpen,
+                                 title,
+                                 description,
+                                 children,
+                                 closeBtn = true,
+                                 buttons,
+                                 contentClassName
+                             }: {
     title: string,
     description?: string,
     children: React.ReactNode,
     open: boolean,
-    setOpen: (open: boolean) => void
+    setOpen: (open: boolean) => void,
+    closeBtn?: boolean,
+    buttons?: React.ReactNode,
+    contentClassName?: string
 }) {
     return (
         <Dialog modal open={open} onOpenChange={(e) => {
             setOpen(e);
         }}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className={contentClassName}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && <DialogDescription>
@@ -28,13 +40,17 @@ export function CustomDialog({open, setOpen, title, description, children}: {
                     </DialogDescription>}
                 </DialogHeader>
                 {children}
-                <DialogFooter className="sm:justify-start">
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
-                            Close
-                        </Button>
-                    </DialogClose>
-                </DialogFooter>
+                {
+                    closeBtn &&
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+                                Close
+                            </Button>
+                        </DialogClose>
+                        {buttons}
+                    </DialogFooter>
+                }
             </DialogContent>
         </Dialog>
     )
