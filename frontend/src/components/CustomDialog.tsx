@@ -17,7 +17,8 @@ export function CustomDialog({
                                  children,
                                  closeBtn = true,
                                  buttons,
-                                 contentClassName
+                                 contentClassName,
+                                 describedby
                              }: {
     title: string,
     description?: string,
@@ -26,13 +27,14 @@ export function CustomDialog({
     setOpen: (open: boolean) => void,
     closeBtn?: boolean,
     buttons?: React.ReactNode,
-    contentClassName?: string
+    contentClassName?: string,
+    describedby?: string
 }) {
     return (
         <Dialog modal open={open} onOpenChange={(e) => {
             setOpen(e);
         }}>
-            <DialogContent className={contentClassName}>
+            <DialogContent className={contentClassName} aria-describedby={describedby || ''}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && <DialogDescription>

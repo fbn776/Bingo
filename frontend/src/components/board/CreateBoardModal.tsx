@@ -1,11 +1,11 @@
 import {StateSetter} from "@/lib/types.ts";
-import {TBoard} from "@/lib/context/gameCtx.tsx";
 import {useState} from "react";
 import {CustomDialog} from "@/components/CustomDialog.tsx";
 import {toast} from "sonner";
-import {shuffleArray} from "@/lib/utils.ts";
+import {generateRandomID, shuffleArray} from "@/lib/utils.ts";
 import RandomDiceIcon from "@/components/icons/RandomIcon.tsx";
 import EraseIcon from "@/components/icons/EraseIcon.tsx";
+import {TBoard} from "@/lib/context/GameCtx.ts";
 
 const SourceArr = Array.from({length: 25}, (_, i) => i + 1);
 
@@ -55,7 +55,8 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards}: {
             setBoards((prev) => [...prev, {
                 timestamp: Date.now(),
                 title,
-                board: boardPattern
+                board: boardPattern,
+                id: generateRandomID()
             }]);
 
             setDialogOpen(false);
@@ -89,7 +90,6 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards}: {
                     <RandomDiceIcon size="18"/>
                 </button>
                 <button type="button" onClick={() => {
-                    console.log(new Array(25).fill(null))
                     setBoardPattern(new Array(25).fill(''));
                 }} className="hover:scale-105 hover:text-blue-500">
                     <EraseIcon size="18"/>

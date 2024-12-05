@@ -1,4 +1,4 @@
-import {useGameCtx} from "@/lib/context/gameCtx.tsx";
+import {useGameCtx} from "@/lib/context/GameCtx.ts";
 
 export function AskForName() {
     const {username, setUsername} = useGameCtx();

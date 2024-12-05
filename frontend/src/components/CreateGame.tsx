@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {copyText, generateGameId} from "@/lib/utils.ts";
+import {copyText, generateRandomID} from "@/lib/utils.ts";
 import {toast} from "sonner";
 import CopyIcon from "@/components/icons/CopyIcon.tsx";
 import RetryIcon from "@/components/icons/RetryIcon.tsx";
@@ -8,7 +8,7 @@ export function CreateGame({onCreate, setOpen}: {
     onCreate: (title: string, gameID: string) => void,
     setOpen: (open: boolean) => void
 }) {
-    const [gameID, setGameID] = useState(generateGameId());
+    const [gameID, setGameID] = useState(generateRandomID());
 
     return <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="p-6 rounded-lg bg-white max-sm:w-[350px]">
@@ -46,7 +46,7 @@ export function CreateGame({onCreate, setOpen}: {
                             className="bg-white flex items-center justify-center border-2 rounded-lg w-[50px] border-l-0 rounded-l-none hover:text-blue-800"
                             onClick={(e) => {
                                 e.preventDefault();
-                                setGameID(generateGameId());
+                                setGameID(generateRandomID());
                             }}>
                         <RetryIcon/>
                     </button>

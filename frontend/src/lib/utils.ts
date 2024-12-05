@@ -11,7 +11,7 @@ const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567
  * Generate a random game ID of a given length
  * @param length The length of the game ID. Default is 8
  */
-export function generateGameId(length = 8) {
+export function generateRandomID(length = 8) {
     let result = '';
     for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * characters.length));

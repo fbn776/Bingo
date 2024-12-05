@@ -6,9 +6,9 @@ import {BrowserRouter, Route, Routes} from "react-router";
 import Home from "./pages/home/Home.tsx";
 import Game from "@/pages/game/Game.tsx";
 import {Toaster} from "@/components/ui/sonner.tsx";
-import Board from "@/pages/board/Board.tsx";
 import {AskForName} from "@/components/AskForName.tsx";
-import {GameCtxProvider} from "@/lib/context/gameCtx.tsx";
+
+import {GameCtxProvider} from "@/lib/context/gameCtxProvider.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
@@ -18,7 +18,6 @@ createRoot(document.getElementById('root')!).render(
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/game" element={<Game/>}/>
-                    <Route path="/board" element={<Board/>}/>
                 </Routes>
             </BrowserRouter>
             <AskForName/>
