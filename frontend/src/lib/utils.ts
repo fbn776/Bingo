@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
 /**
  * Generate a random game ID of a given length
  * @param length The length of the game ID. Default is 8
@@ -62,4 +63,14 @@ export function timeAgo(timestamp: string | number) {
     if (months < 12) return `${months} month${months > 1 ? 's' : ''} ago`;
     const years = Math.floor(months / 12);
     return `${years} year${years > 1 ? 's' : ''} ago`;
+}
+
+/**
+ * Sends a msg through websocket as json string
+ * @param ws
+ * @param data
+ */
+export default function sendMsg<T>(ws: WebSocket, data: T) {
+    if (ws && ws.readyState === ws.OPEN)
+        ws.send(JSON.stringify(data));
 }

@@ -3,9 +3,10 @@ import {timeAgo} from "@/lib/utils.ts";
 import EditIcon from "@/components/icons/EditIcon.tsx";
 import PlusIcon from "@/components/icons/PlusIcon.tsx";
 import {CreateBoardModal} from "@/components/board/CreateBoardModal.tsx";
-import {IconHeart, IconHeartFilled, IconX} from "@tabler/icons-react";
+import {IconHeart, IconHeartFilled, IconTrash, IconX} from "@tabler/icons-react";
 import {StateSetter} from "@/lib/types.ts";
-import {useGameCtx} from "@/lib/context/GameCtx.ts";
+import {TBoard, useGameCtx} from "@/lib/context/GameCtx.ts";
+import {toast} from "sonner";
 
 
 export default function Board({setShowWindow}: {
@@ -13,8 +14,7 @@ export default function Board({setShowWindow}: {
 }) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const {boards, setBoards, selectedBoard, setSelectedBoard} = useGameCtx();
-
-    console.log(selectedBoard);
+    const [editData, setEditData] = useState<TBoard | null>(null);
 
     return <>
         <main className="fixed inset-0 flex size-full items-center justify-center">
@@ -37,8 +37,7 @@ export default function Board({setShowWindow}: {
 
                         boards.length === 0 ? <p className="text-center mt-4 opacity-50">No saved patterns :(</p> :
                             boards.map((cell, j) => {
-
-                                console.log(cell);
+                                const isSelected = selectedBoard?.id === cell.id;
                                 return <div key={j}
                                             className="px-3 py-2 border-2 rounded flex items-center justify-between ">
                                     <div>
@@ -47,16 +46,33 @@ export default function Board({setShowWindow}: {
                                     </div>
                                     <div className="flex gap-5">
                                         <button onClick={() => {
-                                            setSelectedBoard(cell);
-                                        }} className="hover:text-red-500">
-                                            {selectedBoard?.id === cell.id ? <IconHeartFilled/> : <IconHeart/>}
+                                            if(!isSelected) {
+                                                setSelectedBoard(cell);
+                                            }
+                                        }}
+                                                className={`hover:text-red-500 ${isSelected ? 'text-red-500' : 'text-black'}`}>
+                                            {isSelected ? <IconHeartFilled/> : <IconHeart/>}
                                         </button>
 
-
                                         <button className="hover:text-blue-500" onClick={() => {
-
+                                            setEditData(cell);
+                                            setDialogOpen(true);
                                         }}>
                                             <EditIcon/>
+                                        </button>
+
+                                        <button className="hover:text-red-500" onClick={() => {
+                                            if(isSelected) {
+                                                toast.error("You can't delete the selected board");
+                                                return;
+                                            }
+
+                                            if (confirm("Are you sure you want to delete this board?")) {
+                                                setBoards(boards.filter((board) => board.id !== cell.id));
+                                                toast.success("Board deleted successfully");
+                                            }
+                                        }}>
+                                            <IconTrash/>
                                         </button>
                                     </div>
                                 </div>
@@ -64,12 +80,15 @@ export default function Board({setShowWindow}: {
                     }
                 </div>
                 <button
-                    onClick={() => setDialogOpen(true)}
+                    onClick={() => {
+                        setEditData(null);
+                        setDialogOpen(true)
+                    }}
                     className="mt-5 float-end flex items-center gap-2 shadow bg-blue-500 px-2 py-2 rounded text-white hover:bg-blue-700 hover:scale-105">
                     New <PlusIcon size="18"/>
                 </button>
             </div>
         </main>
-        <CreateBoardModal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} setBoards={setBoards}/>
+        <CreateBoardModal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} setBoards={setBoards} edit={editData} setEdit={setEditData}/>
     </>
 }

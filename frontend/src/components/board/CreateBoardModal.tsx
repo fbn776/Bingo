@@ -1,5 +1,5 @@
 import {StateSetter} from "@/lib/types.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {CustomDialog} from "@/components/CustomDialog.tsx";
 import {toast} from "sonner";
 import {generateRandomID, shuffleArray} from "@/lib/utils.ts";
@@ -9,12 +9,26 @@ import {TBoard} from "@/lib/context/GameCtx.ts";
 
 const SourceArr = Array.from({length: 25}, (_, i) => i + 1);
 
-export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards}: {
+export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, setEdit}: {
     dialogOpen: boolean,
     setDialogOpen: (open: boolean) => void,
-    setBoards: StateSetter<TBoard[]>
+    setBoards: StateSetter<TBoard[]>,
+    edit?: TBoard | null,
+    setEdit: StateSetter<TBoard | null>
 }) {
     const [boardPattern, setBoardPattern] = useState<number[]>(SourceArr);
+    const [name, setName] = useState('');
+
+    useEffect(() => {
+        if (edit) {
+            setBoardPattern(edit.board);
+            setName(edit.title);
+        } else {
+            setBoardPattern(SourceArr);
+            setName('');
+        }
+    }, [edit]);
+
 
     return <CustomDialog
         contentClassName="w-fit"
@@ -52,19 +66,38 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards}: {
                 return;
             }
 
-            setBoards((prev) => [...prev, {
-                timestamp: Date.now(),
-                title,
-                board: boardPattern,
-                id: generateRandomID()
-            }]);
+            if (!edit) {
+                setBoards((prev) => [...prev, {
+                    timestamp: Date.now(),
+                    title,
+                    board: boardPattern,
+                    id: generateRandomID()
+                }]);
+            } else {
+                setBoards((prev) => {
+                    return prev.map((cell) => {
+                        if (cell.id === edit.id) {
+                            return {
+                                ...cell,
+                                title,
+                                board: boardPattern
+                            }
+                        }
+
+                        return cell;
+                    });
+                });
+
+                // Reset edit data
+                setEdit(null);
+            }
 
             setDialogOpen(false);
-            toast.success("Board created successfully");
+            toast.success(edit ? "Board updated" : "Board created successfully");
         }}>
             <label htmlFor="title">Board name</label>
             <input type="text" name="title" className="border-2 px-2 py-3 rounded-lg mt-1 mb-3"
-                   placeholder="Enter the board title" required/>
+                   placeholder="Enter the board title" value={name} onChange={(e) => setName(e.target.value)} required/>
 
             <label>Board: </label>
             <div className="my-4 grid grid-cols-5 grid-rows-5 items-center justify-items-center gap-y-4">
@@ -97,7 +130,9 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards}: {
             </div>
 
             <div className="mt-2 flex gap-4 justify-start max-sm:justify-start max-sm:flex-col flex-row-reverse">
-                <button type="submit" className="bg-blue-500 px-4 py-2 rounded text-white">Create</button>
+                <button type="submit" className="bg-blue-500 px-4 py-2 rounded text-white">
+                    {edit ? 'Save' : 'Create'}
+                </button>
                 <button type="button" onClick={() => {
                     if (confirm("Are you sure you want to cancel?")) {
                         setDialogOpen(false);

@@ -3,7 +3,6 @@ import {useGameCtx} from "@/lib/context/GameCtx.ts";
 export function AskForName() {
     const {username, setUsername} = useGameCtx();
 
-
     return (username === null) && <main className="fixed inset-0 size-full bg-black bg-opacity-50 z-50 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-2xl p-4">
             <h1 className="text-2xl mb-2">Enter your name</h1>
