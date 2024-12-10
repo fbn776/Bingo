@@ -1,75 +1,10 @@
 import WebSocket from "ws";
-import {GameInstance} from "./types";
 import Logger from "../lib/Logger";
-import {IAckMsg, ICreateMsg, IErrorMsg, IJoinMsg} from "../../../common/types";
+import {IErrorMsg} from "../../../common/types";
 import sendMsg from "../lib/utils";
+import {createGame} from "./createGame";
+import {joinGame} from "./joinGame";
 
-
-const gameData = new Map<string, GameInstance>();
-
-function createGame(data: ICreateMsg, ws: WebSocket) {
-    if (gameData.has(data.gameID)) {
-        sendMsg(ws, {
-            type: 'error',
-            msg: 'GameID already exists'
-        } as IErrorMsg);
-        return;
-    }
-
-    gameData.set(data.gameID, {
-        createdAt: Date.now(),
-        guest: null,
-        host: {
-            name: data.hostName,
-            ws
-        },
-        gameTitle: data.gameTitle,
-    });
-
-    // Success message back to client
-    sendMsg<IAckMsg>(ws, {
-        type: 'ack',
-        msg: 'Created game'
-    })
-}
-
-function joinGame(data: IJoinMsg, ws: WebSocket) {
-    if (!gameData.has(data.gameID)) {
-        Logger.error(`Game with ID: ${data.gameID} doesn't exists`);
-        sendMsg<IErrorMsg>(ws, {
-            type: 'error',
-            msg: 'Game does not exists',
-        })
-        return;
-    }
-
-    const currGame = gameData.get(data.gameID)!;
-
-    if (currGame.guest) {
-        Logger.error(`Game with ID: ${data.gameID} has 2 players`);
-
-        sendMsg<IErrorMsg>(ws, {
-            type: "error",
-            msg: "Game already full",
-        })
-        return;
-    }
-
-
-    Logger.info(`Guest player(${data.hostName}) has joined game with ID: ${data.gameID}`);
-    gameData.set(data.gameID, {
-        ...currGame,
-        guest: {
-            name: data.hostName,
-            ws: ws
-        }
-    });
-
-    sendMsg<IAckMsg>(ws, {
-        type: 'ack',
-        msg: 'Joined game'
-    })
-}
 
 export default function initGame(wss: WebSocket.Server) {
     wss.on('connection', (ws) => {

@@ -17,11 +17,13 @@ export interface ICreateMsg {
     gameID: string,
     hostName: string,
     gameTitle: string,
+    board: number[]
 }
 
 /** Message format for joining a game*/
 export interface IJoinMsg {
     gameID: string,
     type: "join",
-    hostName: string
+    hostName: string,
+    board: number[]
 }

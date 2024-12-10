@@ -2,7 +2,9 @@ import WebSocket from "ws";
 
 export type TPlayer = {
     ws: WebSocket,
-    name: string
+    name: string,
+    /** The player's board format 1 to 25 numbers*/
+    board: number[]
 }
 
 export interface GameInstance {
@@ -15,6 +17,15 @@ export interface GameInstance {
 
     /** Unix timestamp for when this data was created*/
     createdAt: number,
+
+    /** The current turn of the game*/
+    currentTurn?: "host" | "guest",
+
+    /** The current state of the game
+     *
+     * Each number in the board (1 to 25) and a boolean value to indicate if it has been selected
+     * */
+    currentState?: {[key: number]: boolean}
 }
 
 
