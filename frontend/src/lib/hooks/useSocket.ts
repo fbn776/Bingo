@@ -1,10 +1,13 @@
 import {useEffect, useState} from "react";
 import {WEBSOCKET_URL} from "@/lib/data.ts";
+import {gameEvents} from "@/logic/init.ts";
 
-export default function useSocket() {
+export type TGameStatus = 'creating' | 'created-and-acked' | 'waiting' | 'on-create' | 'on-join' | 'initial'
+
+export default function useSocket(events: typeof gameEvents) {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState<'disconnected' | 'connected' | 'error'>('disconnected');
-
     const [ws, setWs] = useState<WebSocket | null>(null);
+    const [gameStatus, setGameStatus] = useState<TGameStatus>('initial');
 
     useEffect(() => {
         const ws = new WebSocket(WEBSOCKET_URL);
@@ -16,8 +19,14 @@ export default function useSocket() {
 
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
+            console.log("RECEIVED DATA:", data);
 
-            console.log(data);
+            if(data.type === 'ack') {
+                console.log(data);
+                events.emit('created-and-ack', data);
+                setGameStatus('initial');
+            }
+
         };
 
         ws.onclose = () => {
@@ -38,6 +47,8 @@ export default function useSocket() {
 
     return {
         ws, setWs,
-        socketConnectionStatus, setSocketConnectionStatus
+        socketConnectionStatus, setSocketConnectionStatus,
+
+        gameStatus, setGameStatus
     }
 }

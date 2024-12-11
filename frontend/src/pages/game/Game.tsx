@@ -9,6 +9,9 @@ import useSocket from "@/lib/hooks/useSocket.ts";
 import sendMsg from "@/lib/utils.ts";
 import {ICreateMsg} from "../../../../common/types.ts";
 import {useGameCtx} from "@/lib/context/GameCtx.ts";
+import {AskForName} from "@/components/AskForName.tsx";
+import {DEFAULT_BOARD} from "@/lib/data.ts";
+import {gameEvents} from "@/logic/init.ts";
 
 export default function Game() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -18,27 +21,29 @@ export default function Game() {
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [gameData, setGameData] = useState({title: "", gameID: ""});
-    const {username} = useGameCtx();
-
+    const {username, selectedBoard} = useGameCtx();
 
     const {
         ws,
-        socketConnectionStatus
-    } = useSocket();
+        socketConnectionStatus,
+        gameStatus
+    } = useSocket(gameEvents);
 
 
-    function onCreate(title: string, gameID: string) {
-        console.log("Called on Create");
-
-        setSearchParams({type: "start"});
-        setGameData({title, gameID});
-
+    async function onCreate(title: string, gameID: string) {
         sendMsg<ICreateMsg>(ws!, {
             type: 'create',
             gameID: gameID,
             hostName: username!,
-            gameTitle: title
-        })
+            gameTitle: title,
+            board: selectedBoard?.board || DEFAULT_BOARD
+        });
+
+        await gameEvents.waitFor('created-and-ack');
+
+        setDialogOpen(true);
+        setSearchParams({type: "start"});
+        setGameData({title, gameID});
     }
 
     function onJoin(gameID: string) {
@@ -46,19 +51,23 @@ export default function Game() {
         console.log(gameID);
     }
 
-    return <main className="size-full">
-        {socketConnectionStatus !== "connected" &&
-            <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col">
-                <Spinner className={`${socketConnectionStatus === "error" ? 'fill-red-500' : 'fill-blue-500'} size-[70px]`}/>
-                <h1 className="text-white text-opacity-60 text-xl mt-5">
-                    {socketConnectionStatus === "error" ? "An error occurred :(" : "Connecting to server..."}
-                </h1>
-            </div>}
+    return <>
+        <main className="size-full">
+            {socketConnectionStatus !== "connected" &&
+                <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col">
+                    <Spinner
+                        className={`${socketConnectionStatus === "error" ? 'fill-red-500' : 'fill-blue-500'} size-[70px]`}/>
+                    <h1 className="text-white text-opacity-60 text-xl mt-5">
+                        {socketConnectionStatus === "error" ? "An error occurred :(" : "Connecting to server..."}
+                    </h1>
+                </div>}
 
-        {dialogOpen && <GameCreateDialog setClose={setDialogOpen} gameData={gameData}/>}
+            {dialogOpen && <GameCreateDialog setClose={setDialogOpen} gameData={gameData}/>}
 
-        {type === "create" && <CreateGame setOpen={setDialogOpen} onCreate={onCreate}/>}
-        {type === "join" && <JoinGame onJoin={onJoin} code={searchParams.get('gameID')}/>}
-        {type === "start" && <MainGame/>}
-    </main>
+            {type === "create" && <CreateGame gameStatus={gameStatus} onCreate={onCreate}/>}
+            {type === "join" && <JoinGame onJoin={onJoin} code={searchParams.get('gameID')}/>}
+            {type === "start" && <MainGame/>}
+        </main>
+        <AskForName/>
+    </>
 }

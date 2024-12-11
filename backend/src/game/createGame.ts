@@ -3,6 +3,7 @@ import WebSocket from "ws";
 import gameData from "./store";
 import sendMsg from "../lib/utils";
 import GameStore from "./store";
+import Logger from "../lib/Logger";
 
 export function createGame(data: ICreateMsg, ws: WebSocket) {
     try {
@@ -12,10 +13,14 @@ export function createGame(data: ICreateMsg, ws: WebSocket) {
         });
 
         // Success message back to client
-        sendMsg<IAckMsg>(ws, {
-            type: 'ack',
-            msg: 'Created game'
-        })
+        Logger.info(`Host player(${data.hostName}) has created game with ID: ${data.gameID}`);
+        setTimeout(() => {
+            Logger.info(`Sending ACK to host player(${data.hostName})`);
+            sendMsg<IAckMsg>(ws, {
+                type: 'ack',
+                msg: 'Created game'
+            })
+        }, 3000);
     } catch (e) {
         if (gameData.hasGame(data.gameID)) {
             sendMsg(ws, {

@@ -1,6 +1,7 @@
 import FilledUserIcon from "@/components/icons/FilledUserIcon.tsx";
 import UserIcon from "@/components/icons/UserIcon.tsx";
 import ChatIcon from "@/components/icons/ChatIcon.tsx";
+import {useGameCtx} from "@/lib/context/GameCtx.ts";
 
 const arr: number[] = [];
 
@@ -12,21 +13,21 @@ for (let i = 0; i < 5; i++) {
 }
 
 export function MainGame() {
+    const {username} = useGameCtx();
+
     return <div className="size-full flex flex-col justify-between items-center">
         <div className="flex items-center justify-between w-full">
             <div className="rounded-br-xl p-5 w-[40%] bg-blue-200 shadow-xl">
                 <div className="text-3xl flex items-center gap-1">
-                    <FilledUserIcon size="30"/> <span>Tintu</span>
+                    <FilledUserIcon size="30"/> <span>{username}</span>
                 </div>
-                <span className="text-gray-500 font-bold">#jbbd9bjB</span>
             </div>
 
 
             <div className="bg-white rounded-bl-xl p-5 w-[40%] text-right shadow-xl">
                 <div className="text-3xl flex items-center gap-1">
-                    <span>Chotta</span><UserIcon size="30"/>
+                    <span></span><UserIcon size="30"/>
                 </div>
-                <span className="text-gray-500 font-bold">#jbbd9bjB</span>
             </div>
         </div>
 

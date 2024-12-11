@@ -3,12 +3,15 @@ import {copyText, generateRandomID} from "@/lib/utils.ts";
 import {toast} from "sonner";
 import CopyIcon from "@/components/icons/CopyIcon.tsx";
 import RetryIcon from "@/components/icons/RetryIcon.tsx";
+import {TGameStatus} from "@/lib/hooks/useSocket.ts";
+import Spinner from "@/components/ui/spinner.tsx";
 
-export function CreateGame({onCreate, setOpen}: {
-    onCreate: (title: string, gameID: string) => void,
-    setOpen: (open: boolean) => void
+export function CreateGame({onCreate}: {
+    onCreate: (title: string, gameID: string) => Promise<void>,
+    gameStatus: TGameStatus
 }) {
     const [gameID, setGameID] = useState(generateRandomID());
+    const [loading, setLoading] = useState(false);
 
     return <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="p-6 rounded-lg bg-white max-sm:w-[350px]">
@@ -16,17 +19,16 @@ export function CreateGame({onCreate, setOpen}: {
             <hr/>
             <form className="flex flex-col mt-4" onSubmit={(e) => {
                 e.preventDefault();
-                setOpen(true);
-
                 const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
 
                 if (!title) {
                     toast.error("Please enter a title");
                     return;
                 }
-
-                console.log(title, gameID);
-                onCreate(title, gameID);
+                setLoading(true);
+                onCreate(title, gameID).finally(() => {
+                    setLoading(false);
+                });
             }}>
                 <label htmlFor="title">Game name</label>
                 <input type="text" name="title" className="border-2 px-2 py-3 rounded-lg mt-1 mb-3"
@@ -52,7 +54,12 @@ export function CreateGame({onCreate, setOpen}: {
                     </button>
                 </div>
 
-                <button className="mt-5 button bg-blue-500 hover:bg-blue-700 hover:scale-95">Create</button>
+                <button
+                    className="mt-5 button bg-blue-500 hover:bg-blue-700 hover:scale-95 flex items-center justify-center"
+                    disabled={loading}
+                >
+                    {loading ? <Spinner/> : "Create"}
+                </button>
             </form>
         </div>
     </div>
