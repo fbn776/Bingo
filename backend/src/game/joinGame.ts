@@ -1,9 +1,10 @@
-import {IAckMsg, IErrorMsg, IJoinMsg} from "../../../common/types";
+import {IAckMsg, IJoinMsg} from "../../../common/types";
 import WebSocket from "ws";
 import Logger from "../lib/Logger";
 import sendMsg from "../lib/utils";
 import GameStore from "./store";
 import {GameFullError, NoGameFoundError} from "./errors";
+
 
 export function joinGame(data: IJoinMsg, ws: WebSocket) {
     try {
@@ -12,24 +13,39 @@ export function joinGame(data: IJoinMsg, ws: WebSocket) {
             ws
         });
 
-        Logger.info(`Guest player(${data.hostName}) has joined game with ID: ${data.gameID}`);
+        const game = GameStore.getGame(data.gameID)!;
 
+        sendMsg(game.host!.ws, {
+            data: "Some one joined"
+        });
+
+        Logger.info(`Guest player(${data.guestName}) has joined game with ID: ${data.gameID}`);
         sendMsg<IAckMsg>(ws, {
             type: 'ack',
-            msg: 'Joined game'
+            ack_for: 'join-reply',
+            data: {
+                host: game.host,
+                gameTitle: game.gameTitle
+            }
         })
+
     } catch (e) {
-        if(e instanceof NoGameFoundError) {
-            sendMsg(ws, {
-                type: 'error',
+        console.error(e)
+        if (e instanceof NoGameFoundError) {
+            sendMsg<IAckMsg>(ws, {
+                type: 'ack',
+                subtype: 'error',
+                ack_for: 'join-reply',
                 msg: 'Game does not exists'
-            } as IErrorMsg);
+            });
             return;
-        } else if(e instanceof GameFullError) {
-            sendMsg(ws, {
-                type: 'error',
+        } else if (e instanceof GameFullError) {
+            sendMsg<IAckMsg>(ws, {
+                type: 'ack',
+                subtype: 'error',
+                ack_for: 'join-reply',
                 msg: 'Game already full'
-            } as IErrorMsg);
+            });
             return;
         }
     }

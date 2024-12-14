@@ -54,7 +54,7 @@ export default class GameStore {
      * @param data
      */
     static joinGame(gameID: string, data: IJoinMsg & { ws: WebSocket }) {
-        if (this.hasGame(data.gameID)) {
+        if (!this.hasGame(data.gameID)) {
             throw new NoGameFoundError();
         }
 
@@ -67,7 +67,7 @@ export default class GameStore {
         this.gameData.set(data.gameID, {
             ...currGame,
             guest: {
-                name: data.hostName,
+                name: data.guestName,
                 ws: data.ws,
                 board: data.board
             }

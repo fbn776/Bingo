@@ -1,8 +1,8 @@
-import {IAckMsg, ICreateMsg, IErrorMsg} from "../../../common/types";
+import {IAckMsg, ICreateMsg} from "../../../common/types";
 import WebSocket from "ws";
 import gameData from "./store";
-import sendMsg from "../lib/utils";
 import GameStore from "./store";
+import sendMsg from "../lib/utils";
 import Logger from "../lib/Logger";
 
 export function createGame(data: ICreateMsg, ws: WebSocket) {
@@ -14,19 +14,19 @@ export function createGame(data: ICreateMsg, ws: WebSocket) {
 
         // Success message back to client
         Logger.info(`Host player(${data.hostName}) has created game with ID: ${data.gameID}`);
-        setTimeout(() => {
-            Logger.info(`Sending ACK to host player(${data.hostName})`);
-            sendMsg<IAckMsg>(ws, {
-                type: 'ack',
-                msg: 'Created game'
-            })
-        }, 3000);
+        Logger.info(`Sending ACK to host player(${data.hostName})`);
+        sendMsg<IAckMsg>(ws, {
+            type: 'ack',
+            ack_for: 'create-reply'
+        })
     } catch (e) {
         if (gameData.hasGame(data.gameID)) {
-            sendMsg(ws, {
-                type: 'error',
+            sendMsg<IAckMsg>(ws, {
+                type: 'ack',
+                ack_for: 'join-reply',
+                subtype: 'error',
                 msg: 'GameID already exists'
-            } as IErrorMsg);
+            });
             return;
         }
     }

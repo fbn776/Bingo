@@ -21,11 +21,16 @@ export default function useSocket(events: typeof gameEvents) {
             const data = JSON.parse(e.data);
             console.log("RECEIVED DATA:", data);
 
-            if(data.type === 'ack') {
-                console.log(data);
-                events.emit('created-and-ack', data);
-                setGameStatus('initial');
+            switch (data.type) {
+                case 'ack':
+                    events.emit(data.ack_for, data);
+                    break;
+
+                default:
+                    console.error("Undefined type");
+                    break;
             }
+
 
         };
 

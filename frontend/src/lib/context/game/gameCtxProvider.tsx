@@ -1,8 +1,8 @@
 import {ReactNode} from "react";
 import {useLocalStorage} from "usehooks-ts";
 import {STORE_KEY} from "@/lib/data.ts";
-import {TBoard} from "@/lib/context/GameCtx.ts";
-import {GameCtx} from "@/lib/context/GameCtx.ts";
+import {TBoard} from "@/lib/context/game/GameCtx.ts";
+import {GameCtx} from "@/lib/context/game/GameCtx.ts";
 
 export function GameCtxProvider({children}: {
     children: ReactNode;

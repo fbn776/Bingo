@@ -5,7 +5,7 @@ import PlusIcon from "@/components/icons/PlusIcon.tsx";
 import {CreateBoardModal} from "@/components/board/CreateBoardModal.tsx";
 import {IconHeart, IconHeartFilled, IconTrash, IconX} from "@tabler/icons-react";
 import {StateSetter} from "@/lib/types.ts";
-import {TBoard, useGameCtx} from "@/lib/context/GameCtx.ts";
+import {TBoard, useGameCtx} from "@/lib/context/game/GameCtx.ts";
 import {toast} from "sonner";
 
 

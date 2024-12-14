@@ -1,18 +1,29 @@
+export interface IMessage {
+    type: "error" | "ack" | "create" | "join";
+}
 
 /** Message representing an error*/
-export interface IErrorMsg {
+export interface IErrorMsg extends IMessage {
     type: "error",
     msg: string
 }
 
+/** Types of Acknowledgement*/
+export type TAckFor = 'create-reply' | 'join-reply';
+
 /** Acknowledgement message*/
-export interface IAckMsg {
+export interface IAckMsg extends IMessage {
     type: 'ack',
-    msg: string
+    /** Type of the acknowledgement*/
+    subtype?: 'error' | 'info',
+    /** What the acknowledgement is for*/
+    ack_for: TAckFor,
+    msg?: string,
+    data?: unknown
 }
 
 /** Message format for creating a game*/
-export interface ICreateMsg {
+export interface ICreateMsg extends IMessage {
     type: "create",
     gameID: string,
     hostName: string,
@@ -21,9 +32,9 @@ export interface ICreateMsg {
 }
 
 /** Message format for joining a game*/
-export interface IJoinMsg {
+export interface IJoinMsg extends IMessage {
     gameID: string,
     type: "join",
-    hostName: string,
+    guestName: string,
     board: number[]
 }

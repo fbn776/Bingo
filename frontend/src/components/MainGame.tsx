@@ -1,7 +1,7 @@
 import FilledUserIcon from "@/components/icons/FilledUserIcon.tsx";
 import UserIcon from "@/components/icons/UserIcon.tsx";
 import ChatIcon from "@/components/icons/ChatIcon.tsx";
-import {useGameCtx} from "@/lib/context/GameCtx.ts";
+import {useGameCtx} from "@/lib/context/game/GameCtx.ts";
 
 const arr: number[] = [];
 

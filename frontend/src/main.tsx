@@ -7,7 +7,7 @@ import Home from "./pages/home/Home.tsx";
 import Game from "@/pages/game/Game.tsx";
 import {Toaster} from "@/components/ui/sonner.tsx";
 
-import {GameCtxProvider} from "@/lib/context/gameCtxProvider.tsx";
+import {GameCtxProvider} from "@/lib/context/game/gameCtxProvider.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>

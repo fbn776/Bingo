@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import Logger from "../lib/Logger";
-import {IErrorMsg} from "../../../common/types";
+import {IErrorMsg, IMessage} from "../../../common/types";
 import sendMsg from "../lib/utils";
 import {createGame} from "./createGame";
 import {joinGame} from "./joinGame";
@@ -11,7 +11,7 @@ export default function initGame(wss: WebSocket.Server) {
         console.log('New WebSocket connection');
 
         ws.on('message', (message: string) => {
-            const data = JSON.parse(message.toString());
+            const data= JSON.parse(message.toString());
             console.log(data);
 
             switch (data.type) {

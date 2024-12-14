@@ -3,15 +3,16 @@ import {useLocation} from "react-router";
 import {useEffect} from "react";
 import {copyText} from "@/lib/utils.ts";
 import CopyIcon from "@/components/icons/CopyIcon.tsx";
+import {useCurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
 
-export function GameCreateDialog({gameData, setClose}: {
-    gameData: { gameID: string; title: string },
+export function GameCreateDialog({setClose}: {
     setClose: StateSetter<boolean>
 }) {
+    const {gameID} = useCurrGameCtx();
+
     const location = useLocation();
     const baseURL = window.location.origin;
-    const currentURL = `${baseURL}${location.pathname}?type=join&gameID=${gameData.gameID}`;
-
+    const currentURL = `${baseURL}${location.pathname}?type=join&gameID=${gameID}`;
 
     useEffect(() => {
         const closeIfEscape = (e: KeyboardEvent) => {
@@ -34,9 +35,9 @@ export function GameCreateDialog({gameData, setClose}: {
             <div className="mt-6">
                 Share the code
                 <div className="mt-2 flex w-fit bg-gray-100 overflow-hidden rounded-lg p-2 gap-2 select-all border-2">
-                    {gameData.gameID}
+                    {gameID}
                     <button type="button" className="opacity-60 hover:text-blue-800"
-                            onClick={() => copyText(gameData.gameID)}>
+                            onClick={() => copyText(gameID)}>
                         <CopyIcon/>
                     </button>
                 </div>

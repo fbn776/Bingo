@@ -1,17 +1,46 @@
 import {useState} from "react";
-import {copyText, generateRandomID} from "@/lib/utils.ts";
+import sendMsg, {copyText, generateRandomID} from "@/lib/utils.ts";
 import {toast} from "sonner";
 import CopyIcon from "@/components/icons/CopyIcon.tsx";
 import RetryIcon from "@/components/icons/RetryIcon.tsx";
-import {TGameStatus} from "@/lib/hooks/useSocket.ts";
 import Spinner from "@/components/ui/spinner.tsx";
+import {ICreateMsg} from "../../../common/types.ts";
+import {DEFAULT_BOARD} from "@/lib/data.ts";
+import {gameEvents} from "@/logic/init.ts";
+import {useGameCtx} from "@/lib/context/game/GameCtx.ts";
+import {useSearchParams} from "react-router";
+import {StateSetter} from "@/lib/types.ts";
+import {useCurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
 
-export function CreateGame({onCreate}: {
-    onCreate: (title: string, gameID: string) => Promise<void>,
-    gameStatus: TGameStatus
+export function CreateGame({ws, setDialogOpen}: {
+    ws: WebSocket | null,
+    setDialogOpen: StateSetter<boolean>
 }) {
+    const [, setSearchParams] = useSearchParams();
     const [gameID, setGameID] = useState(generateRandomID());
     const [loading, setLoading] = useState(false);
+    const {username, selectedBoard} = useGameCtx();
+    const {setHost, setGameID: _setGameID} = useCurrGameCtx();
+
+    async function onCreate(title: string, gameID: string) {
+        sendMsg<ICreateMsg>(ws!, {
+            type: 'create',
+            gameID: gameID,
+            hostName: username!,
+            gameTitle: title,
+            board: selectedBoard?.board || DEFAULT_BOARD
+        });
+
+        await gameEvents.waitFor('create-reply');
+
+        setDialogOpen(true);
+        // Change URL to main game
+        setSearchParams({type: "start"});
+
+        // Set info for the game
+        setHost(username!);
+        _setGameID(gameID);
+    }
 
     return <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="p-6 rounded-lg bg-white max-sm:w-[350px]">

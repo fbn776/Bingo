@@ -5,7 +5,7 @@ import {toast} from "sonner";
 import {generateRandomID, shuffleArray} from "@/lib/utils.ts";
 import RandomDiceIcon from "@/components/icons/RandomIcon.tsx";
 import EraseIcon from "@/components/icons/EraseIcon.tsx";
-import {TBoard} from "@/lib/context/GameCtx.ts";
+import {TBoard} from "@/lib/context/game/GameCtx.ts";
 
 const SourceArr = Array.from({length: 25}, (_, i) => i + 1);
 
