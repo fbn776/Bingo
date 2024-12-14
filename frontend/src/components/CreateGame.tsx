@@ -20,7 +20,7 @@ export function CreateGame({ws, setDialogOpen}: {
     const [gameID, setGameID] = useState(generateRandomID());
     const [loading, setLoading] = useState(false);
     const {username, selectedBoard} = useGameCtx();
-    const {setHost, setGameID: _setGameID} = useCurrGameCtx();
+    const {setCurrCtx} = useCurrGameCtx();
 
     async function onCreate(title: string, gameID: string) {
         sendMsg<ICreateMsg>(ws!, {
@@ -38,8 +38,13 @@ export function CreateGame({ws, setDialogOpen}: {
         setSearchParams({type: "start"});
 
         // Set info for the game
-        setHost(username!);
-        _setGameID(gameID);
+        setCurrCtx({
+            gameID: gameID,
+            gameTitle: title,
+            youAre: 'host',
+            guest: '',
+            host: username!
+        })
     }
 
     return <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

@@ -8,7 +8,6 @@ import Spinner from "@/components/ui/spinner.tsx";
 import useSocket from "@/lib/hooks/useSocket.ts";
 import {AskForName} from "@/components/AskForName.tsx";
 import {gameEvents} from "@/logic/init.ts";
-import {CurrentGameCtxProvider} from "@/lib/context/currentGame/currentGameCtxProvider.tsx";
 
 export default function Game() {
     const [searchParams] = useSearchParams();
@@ -32,12 +31,10 @@ export default function Game() {
                         {socketConnectionStatus === "error" ? "An error occurred :(" : "Connecting to server..."}
                     </h1>
                 </div>}
-            <CurrentGameCtxProvider>
-                {dialogOpen && <GameCreateDialog setClose={setDialogOpen}/>}
-                {type === "create" && <CreateGame setDialogOpen={setDialogOpen} ws={ws}/>}
-                {type === "join" && <JoinGame ws={ws} code={searchParams.get('gameID')}/>}
-                {type === "start" && <MainGame/>}
-            </CurrentGameCtxProvider>
+            {dialogOpen && <GameCreateDialog setClose={setDialogOpen}/>}
+            {type === "create" && <CreateGame setDialogOpen={setDialogOpen} ws={ws}/>}
+            {type === "join" && <JoinGame ws={ws} code={searchParams.get('gameID')}/>}
+            {type === "start" && <MainGame setDialogOpen={setDialogOpen}/>}
         </main>
         <AskForName/>
     </>

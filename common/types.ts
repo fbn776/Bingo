@@ -1,5 +1,5 @@
 export interface IMessage {
-    type: "error" | "ack" | "create" | "join";
+    type: "error" | "ack" | "create" | "join" | "player-joined";
 }
 
 /** Message representing an error*/
@@ -19,7 +19,7 @@ export interface IAckMsg extends IMessage {
     /** What the acknowledgement is for*/
     ack_for: TAckFor,
     msg?: string,
-    data?: unknown
+    data?: any
 }
 
 /** Message format for creating a game*/
@@ -37,4 +37,9 @@ export interface IJoinMsg extends IMessage {
     type: "join",
     guestName: string,
     board: number[]
+}
+
+export interface IPlayerJoined extends IMessage {
+    type: "player-joined",
+    guestName: string
 }

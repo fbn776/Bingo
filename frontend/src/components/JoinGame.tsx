@@ -5,6 +5,7 @@ import {gameEvents} from "@/logic/init.ts";
 import {toast} from "sonner";
 import {useGameCtx} from "@/lib/context/game/GameCtx.ts";
 import {useSearchParams} from "react-router";
+import {useCurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
 
 export function JoinGame({ws, code}: {
     code?: string | null,
@@ -12,6 +13,7 @@ export function JoinGame({ws, code}: {
 }) {
     const {username, selectedBoard} = useGameCtx();
     const [, setSearchParams] = useSearchParams();
+    const {setCurrCtx} = useCurrGameCtx();
 
     async function onJoin(gameID: string) {
         console.log("Sending msg")
@@ -25,12 +27,20 @@ export function JoinGame({ws, code}: {
         const data = await gameEvents.waitFor('join-reply');
         console.log("ack data:", data);
 
-        console.log(data);
 
         if(data.subtype === "error") {
             toast.error(data.msg);
         } else {
             toast.success("Joined game");
+
+            setCurrCtx({
+                gameID: gameID,
+                youAre: 'guest', // Joining the game, so set it to guest
+                gameTitle: data.data.gameTitle,
+                guest: username!, // You are the guest
+                host: data.data.host
+            })
+
             setSearchParams({type: "start"});
         }
     }

@@ -1,18 +1,16 @@
 import {createContext, useContext} from "react";
 import {StateSetter} from "@/lib/types.ts";
 
-interface ICurrGameCtx {
+export interface ICurrGame {
+    youAre: "guest" | "host" | null,
     gameID: string,
-    setGameID: StateSetter<string>,
-
     gameTitle: string,
-    setGameTitle: StateSetter<string>
-
     host: string,
-    setHost: StateSetter<string>
-
     guest: string,
-    setGuest: StateSetter<string>
+}
+
+interface ICurrGameCtx extends ICurrGame {
+    setCurrCtx: StateSetter<ICurrGame>
 }
 
 export const CurrGameCtx = createContext<ICurrGameCtx | undefined>(undefined);
@@ -25,7 +23,7 @@ export const CurrGameCtx = createContext<ICurrGameCtx | undefined>(undefined);
 export const useCurrGameCtx = (): ICurrGameCtx => {
     const context = useContext(CurrGameCtx);
     if (!context) {
-        throw new Error("useUser must be used within a UserProvider");
+        throw new Error("use ctx must be used within the ctx provider");
     }
     return context;
 };

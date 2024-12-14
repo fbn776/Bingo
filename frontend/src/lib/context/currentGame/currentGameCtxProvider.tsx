@@ -1,23 +1,20 @@
 import {ReactNode, useState} from "react";
-import {CurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
+import {CurrGameCtx, ICurrGame} from "@/lib/context/currentGame/CurrentGameCtx.ts";
 
 
 export function CurrentGameCtxProvider({children}: {
     children: ReactNode;
 }) {
-    const [host, setHost] = useState('');
-    const [gameID, setGameID] = useState('');
-    const [gameTitle, setGameTitle] = useState('');
-    const [guest, setGuest] = useState('');
-
+    const [currCtx, setCurrCtx] = useState<ICurrGame>({
+        youAre: null,
+        host: '',
+        gameID: '',
+        gameTitle: '',
+        guest: '',
+    })
 
     return (
-        <CurrGameCtx.Provider value={{
-            host, setHost,
-            gameID, setGameID,
-            gameTitle, setGameTitle,
-            guest, setGuest
-        }}>
+        <CurrGameCtx.Provider value={{...currCtx, setCurrCtx}}>
             {children}
         </CurrGameCtx.Provider>
     );

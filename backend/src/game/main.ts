@@ -14,7 +14,7 @@ export default function initGame(wss: WebSocket.Server) {
             const data= JSON.parse(message.toString());
             console.log(data);
 
-            switch (data.type) {
+            switch (data.type as IMessage["type"]) {
                 case 'join':
                     Logger.info('JOIN request');
                     joinGame(data, ws);

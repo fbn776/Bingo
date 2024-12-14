@@ -1,4 +1,4 @@
-import {IAckMsg, IJoinMsg} from "../../../common/types";
+import {IAckMsg, IJoinMsg, IPlayerJoined} from "../../../common/types";
 import WebSocket from "ws";
 import Logger from "../lib/Logger";
 import sendMsg from "../lib/utils";
@@ -15,8 +15,10 @@ export function joinGame(data: IJoinMsg, ws: WebSocket) {
 
         const game = GameStore.getGame(data.gameID)!;
 
-        sendMsg(game.host!.ws, {
-            data: "Some one joined"
+        // Send message to host that a player joined
+        sendMsg<IPlayerJoined>(game.host!.ws, {
+            type: "player-joined",
+            guestName: data.guestName
         });
 
         Logger.info(`Guest player(${data.guestName}) has joined game with ID: ${data.gameID}`);
@@ -24,10 +26,10 @@ export function joinGame(data: IJoinMsg, ws: WebSocket) {
             type: 'ack',
             ack_for: 'join-reply',
             data: {
-                host: game.host,
+                host: game.host?.name,
                 gameTitle: game.gameTitle
             }
-        })
+        });
 
     } catch (e) {
         console.error(e)
