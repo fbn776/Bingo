@@ -13,7 +13,7 @@ export type TBoard = {
     id: string
 };
 
-interface TGameCtx {
+interface TAppCtx {
     /** The username of the player */
     username: string | null;
     /** Set the username of the player*/
@@ -28,17 +28,22 @@ interface TGameCtx {
     selectedBoard: TBoard | null;
     /** Set the selected board */
     setSelectedBoard: StateSetter<TBoard | null>;
+
+    /** Whether the board window is shown */
+    showBoardsWindow: boolean;
+    /** Set whether the board window is shown */
+    setShowBoardsWindow: StateSetter<boolean>;
 }
 
-export const GameCtx = createContext<TGameCtx | undefined>(undefined);
+export const AppCtx = createContext<TAppCtx | undefined>(undefined);
 
 /**
- * Custom hook to use the game context
- *
- * @returns {TGameCtx} The game context
+ * The main game's context, helps to control the app/game. Controls or stores global data like the
+ * `username`, `boards`, window visibility, etc.
+ * @returns {TAppCtx} The game context
  */
-export const useGameCtx = (): TGameCtx => {
-    const context = useContext(GameCtx);
+export const useAppCtx = (): TAppCtx => {
+    const context = useContext(AppCtx);
     if (!context) {
         throw new Error("useUser must be used within a UserProvider");
     }

@@ -2,12 +2,14 @@ import {StateSetter} from "@/lib/types.ts";
 import {useEffect, useState} from "react";
 import {CustomDialog} from "@/components/CustomDialog.tsx";
 import {toast} from "sonner";
-import {generateRandomID, shuffleArray} from "@/lib/utils.ts";
+import {checkForDuplicatesAndWhere, cn, generateRandomID, shuffleArray} from "@/lib/utils.ts";
 import RandomDiceIcon from "@/components/icons/RandomIcon.tsx";
 import EraseIcon from "@/components/icons/EraseIcon.tsx";
-import {TBoard} from "@/lib/context/game/GameCtx.ts";
+import {TBoard} from "@/lib/context/app/AppCtx.ts";
 
 const SourceArr = Array.from({length: 25}, (_, i) => i + 1);
+
+const EMPTY_ERRORS: string[] = Array(25).fill("");
 
 export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, setEdit}: {
     dialogOpen: boolean,
@@ -19,6 +21,8 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
     const [boardPattern, setBoardPattern] = useState<number[]>(SourceArr);
     const [name, setName] = useState('');
 
+    const [boardError, setBoardError] = useState(EMPTY_ERRORS);
+
     useEffect(() => {
         if (edit) {
             setBoardPattern(edit.board);
@@ -29,7 +33,6 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
         }
     }, [edit]);
 
-
     return <CustomDialog
         contentClassName="w-fit"
         title="Create Board"
@@ -39,6 +42,9 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
     >
         <form className="flex flex-col mt-4" onSubmit={(e) => {
             e.preventDefault();
+
+            // Reset board error on submit
+            setBoardError(EMPTY_ERRORS);
 
             const filled = boardPattern.every((cell) => !isNaN(cell));
 
@@ -59,6 +65,24 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
             if (!correctBound) {
                 return;
             }
+
+            // Check for duplicates
+            const duplicates = checkForDuplicatesAndWhere(boardPattern);
+            if (duplicates.length > 0) {
+                setBoardError((prev) => {
+                    return prev.map((_, j) => {
+                        if (duplicates.includes(j)) {
+                            return "border-red-500";
+                        }
+
+                        return "";
+                    });
+                });
+
+                toast.error("Please fill all the cells with unique numbers");
+                return;
+            }
+
 
             const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
             if (!title) {
@@ -108,9 +132,12 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                                       const newPattern = [...boardPattern];
                                       newPattern[j] = parseInt(e.target.value);
                                       setBoardPattern(newPattern);
+
+                                      // Reset board error
+                                      setBoardError(EMPTY_ERRORS);
                                   }}
                                   placeholder={`${j + 1}`} required
-                                  className="border-2 rounded text-center aspect-square w-[60px] max-sm:w-[50px]"
+                                  className={cn(boardError[j], "border-2 rounded text-center aspect-square w-[60px] max-sm:w-[50px]")}
                                   max={25} min={1} type="number"
                     />
                 })}

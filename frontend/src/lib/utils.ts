@@ -74,3 +74,29 @@ export default function sendMsg<T>(ws: WebSocket, data: T) {
     if (ws && ws.readyState === ws.OPEN)
         ws.send(JSON.stringify(data));
 }
+
+/**
+ * Check for duplicates in an array and return the indices of the duplicates
+ * @param arr The array to check for duplicates
+ */
+export function checkForDuplicatesAndWhere<T>(arr: T[]): number[] {
+    const indexMap = new Map<T, number[]>();
+    const repeatedIndices: number[] = [];
+
+    arr.forEach((value, index) => {
+        if (indexMap.has(value)) {
+            indexMap.get(value)!.push(index);
+        } else {
+            indexMap.set(value, [index]);
+        }
+    });
+
+    // Collect indices of repeated values
+    indexMap.forEach((indices) => {
+        if (indices.length > 1) {
+            repeatedIndices.push(...indices);
+        }
+    });
+
+    return repeatedIndices;
+}

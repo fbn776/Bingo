@@ -4,28 +4,32 @@ import EditIcon from "@/components/icons/EditIcon.tsx";
 import PlusIcon from "@/components/icons/PlusIcon.tsx";
 import {CreateBoardModal} from "@/components/board/CreateBoardModal.tsx";
 import {IconHeart, IconHeartFilled, IconTrash, IconX} from "@tabler/icons-react";
-import {StateSetter} from "@/lib/types.ts";
-import {TBoard, useGameCtx} from "@/lib/context/game/GameCtx.ts";
+import {TBoard, useAppCtx} from "@/lib/context/app/AppCtx.ts";
 import {toast} from "sonner";
 
 
-export default function Board({setShowWindow}: {
-    setShowWindow: StateSetter<boolean>
-}) {
+export default function BoardsWindow() {
     const [dialogOpen, setDialogOpen] = useState(false);
-    const {boards, setBoards, selectedBoard, setSelectedBoard} = useGameCtx();
+    const {boards, setBoards, selectedBoard, setSelectedBoard, showBoardsWindow, setShowBoardsWindow} = useAppCtx();
     const [editData, setEditData] = useState<TBoard | null>(null);
 
-    return <>
+    // If there isn't any board selected, select the first one.
+    if(!boards.some((board) => {
+        return selectedBoard?.id === board.id;
+    })) {
+        setSelectedBoard(boards[0]);
+    }
+
+    return showBoardsWindow && <>
         <main className="fixed inset-0 flex size-full items-center justify-center">
             <div className="fixed inset-0 bg-black bg-opacity-60 -z-20" onClick={() => {
-                setShowWindow(false);
+                setShowBoardsWindow(false);
             }}></div>
             <div className="bg-white rounded-lg shadow-2xl p-4 w-[700px] max-sm:w-[380px]">
                 <h1 className="text-2xl mb-2">
                     Customize your board pattern
                     <button className="float-end hover:text-red-500 hover:scale-110" onClick={() => {
-                        setShowWindow(false);
+                        setShowBoardsWindow(false);
                     }}>
                         <IconX/>
                     </button>
@@ -46,7 +50,7 @@ export default function Board({setShowWindow}: {
                                     </div>
                                     <div className="flex gap-5">
                                         <button onClick={() => {
-                                            if(!isSelected) {
+                                            if (!isSelected) {
                                                 setSelectedBoard(cell);
                                             }
                                         }}
@@ -62,7 +66,7 @@ export default function Board({setShowWindow}: {
                                         </button>
 
                                         <button className="hover:text-red-500" onClick={() => {
-                                            if(isSelected) {
+                                            if (isSelected) {
                                                 toast.error("You can't delete the selected board");
                                                 return;
                                             }
@@ -89,6 +93,7 @@ export default function Board({setShowWindow}: {
                 </button>
             </div>
         </main>
-        <CreateBoardModal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} setBoards={setBoards} edit={editData} setEdit={setEditData}/>
+        <CreateBoardModal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} setBoards={setBoards} edit={editData}
+                          setEdit={setEditData}/>
     </>
 }
