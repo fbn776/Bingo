@@ -1,5 +1,6 @@
 import {createContext, useContext} from "react";
 import {StateSetter} from "@/lib/types.ts";
+import {TLocalBoardCell} from "../../../../../common/types.ts";
 
 export interface ICurrGame {
     youAre: "guest" | "host" | null,
@@ -7,10 +8,13 @@ export interface ICurrGame {
     gameTitle: string,
     host: string,
     guest: string,
+    currBoardState: TLocalBoardCell[],
+    currentTurn: "guest" | "host" | null
 }
 
 interface ICurrGameCtx extends ICurrGame {
     setCurrCtx: StateSetter<ICurrGame>,
+    setBoard: (board: TLocalBoardCell[]) => void
 }
 
 export const CurrGameCtx = createContext<ICurrGameCtx | undefined>(undefined);

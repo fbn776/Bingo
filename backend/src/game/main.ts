@@ -4,6 +4,7 @@ import {IErrorMsg, IMessage} from "../../../common/types";
 import sendMsg from "../lib/utils";
 import {createGame} from "./createGame";
 import {joinGame} from "./joinGame";
+import playGame from "./playGame";
 
 
 export default function initGame(wss: WebSocket.Server) {
@@ -22,6 +23,10 @@ export default function initGame(wss: WebSocket.Server) {
                 case 'create':
                     Logger.info('CREATE request');
                     createGame(data, ws);
+                    break;
+                case 'move':
+                    Logger.info('MOVE request');
+                    playGame(data, ws);
                     break;
                 default:
                     sendMsg<IErrorMsg>(ws, {

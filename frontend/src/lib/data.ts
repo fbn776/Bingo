@@ -1,5 +1,6 @@
 import {TBoard} from "@/lib/context/app/useAppCtx.ts";
 import {generateRandomID} from "@/lib/utils.ts";
+import {TLocalBoardCell} from "../../../common/types.ts";
 
 export const STORE_KEY = {
     username: "bingo-username",
@@ -21,3 +22,5 @@ export const DEFAULT_BOARD: TBoard = {
     timestamp: Date.now(),
     id: generateRandomID()
 };
+
+export const DEFAULT_BOARD_STATE: TLocalBoardCell[] = Array.from({length: 25}).map((_, i) => ({num: i, selected: false}));

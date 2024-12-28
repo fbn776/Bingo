@@ -5,7 +5,6 @@ import {IMessage} from "../../../../common/types.ts";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import {toast} from "sonner";
 
-// export type TGameStatus = 'creating' | 'created-and-acked' | 'waiting' | 'on-create' | 'on-join' | 'initial'
 
 export default function useSocket(events: typeof gameEvents) {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState<'disconnected' | 'connected' | 'error'>('disconnected');
@@ -33,6 +32,22 @@ export default function useSocket(events: typeof gameEvents) {
                     setCurrCtx(prevState => {
                         return {...prevState, guest: data.guestName}
                     })
+                    break;
+                case "info-move":
+                    setCurrCtx(prev => ({
+                        ...prev,
+                        currentTurn: prev.currentTurn === "guest" ? "host" : 'guest',
+                        currBoardState: prev.currBoardState.map((item) => {
+                            if(item.num === data.selected) {
+                                return {
+                                    num: item.num,
+                                    selected: true,
+                                }
+                            }
+
+                            return item;
+                        })
+                    }))
                     break;
                 default:
                     console.error("Undefined type");

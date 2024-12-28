@@ -8,7 +8,7 @@ import {GameFullError, NoGameFoundError} from "./errors";
 
 export function joinGame(data: IJoinMsg, ws: WebSocket) {
     try {
-        GameStore.joinGame(data.gameID, {
+        GameStore.joinGame({
             ...data,
             ws
         });
@@ -27,7 +27,8 @@ export function joinGame(data: IJoinMsg, ws: WebSocket) {
             ack_for: 'join-reply',
             data: {
                 host: game.host?.name,
-                gameTitle: game.gameTitle
+                gameTitle: game.gameTitle,
+                currentTurn: game.currentTurn
             }
         });
 

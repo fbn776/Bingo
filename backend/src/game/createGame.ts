@@ -17,7 +17,10 @@ export function createGame(data: ICreateMsg, ws: WebSocket) {
         Logger.info(`Sending ACK to host player(${data.hostName})`);
         sendMsg<IAckMsg>(ws, {
             type: 'ack',
-            ack_for: 'create-reply'
+            ack_for: 'create-reply',
+            data: {
+                currentTurn: GameStore.getGame(data.gameID)?.currentTurn
+            }
         })
     } catch (e) {
         if (gameData.hasGame(data.gameID)) {

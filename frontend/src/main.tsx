@@ -28,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
                         </SocketCtxProvider>
                     </CurrentGameCtxProvider>}>
                         <Route path="" index element={<MainGame/>}/>
+                        <Route path="join" element={<JoinGame/>}/>
                         <Route path="join/:code" element={<JoinGame/>}/>
                         <Route path="create" element={<CreateGame/>}/>
                     </Route>

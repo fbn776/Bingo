@@ -18,7 +18,7 @@ export default function BoardsWindow() {
             <div className="fixed inset-0 bg-black bg-opacity-60 -z-20" onClick={() => {
                 setShowBoardsWindow(false);
             }}></div>
-            <div className="bg-white rounded-lg shadow-2xl p-4 w-[700px] max-sm:w-[380px]">
+            <div className="bg-white rounded-lg shadow-2xl p-4 w-[700px] max-sm:max-w-[90%]">
                 <h1 className="text-2xl mb-2">
                     Customize your board pattern
                     <button className="float-end hover:text-red-500 hover:scale-110" onClick={() => {

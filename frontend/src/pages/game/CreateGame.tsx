@@ -1,5 +1,5 @@
 import {useState} from "react";
-import sendMsg, {copyText, generateRandomID} from "@/lib/utils.ts";
+import sendMsg, {copyText, generateRandomID, mapUserBoardToBoardState} from "@/lib/utils.ts";
 import {toast} from "sonner";
 import CopyIcon from "@/components/icons/CopyIcon.tsx";
 import RetryIcon from "@/components/icons/RetryIcon.tsx";
@@ -30,7 +30,9 @@ export function CreateGame() {
             board: selectedBoard?.board || DEFAULT_BOARD.board
         });
 
-        await gameEvents.waitFor('create-reply');
+        const data = await gameEvents.waitFor('create-reply') as { data: { currentTurn: "guest" | "host" } };
+
+        console.log("CREATED:", data);
 
         // Change URL to main game
         navigate('/game');
@@ -41,7 +43,9 @@ export function CreateGame() {
             gameTitle: title,
             youAre: 'host',
             guest: '',
-            host: username!
+            host: username!,
+            currBoardState: mapUserBoardToBoardState(selectedBoard!),
+            currentTurn: data.data.currentTurn
         })
     }
 

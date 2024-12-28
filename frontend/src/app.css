@@ -12,7 +12,49 @@
 }
 
 .game-board button {
-    @apply text-center text-3xl p-6 border-2 hover:bg-blue-200 max-sm:p-5 max-sm:text-2xl;
+    @apply text-center text-3xl p-6 border-2 max-sm:p-5 max-sm:text-2xl;
+}
+
+.game-board button:not(.selected) {
+    @apply hover:bg-blue-200;
+}
+
+.game-board button.selected:hover::before, .game-board button.selected:hover::after {
+    opacity: 0.2;
+}
+
+.game-board button.selected {
+    position: relative;
+    @apply bg-gray-300 opacity-60;
+    cursor: not-allowed;
+}
+
+.game-board button:before, .game-board button:after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 0;
+    background: black;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+.game-board button.selected:before, .game-board button.selected:after {
+    height: calc(100% * 1.41);
+}
+
+.game-board button:before {
+    top: 0;
+    left: 0;
+    transform-origin: top;
+    rotate: -45deg;
+}
+
+.game-board button:after {
+    top: 0;
+    right: 0;
+    transform-origin: top;
+    rotate: 45deg;
 }
 
 .game-board button:nth-child(-n+5) {

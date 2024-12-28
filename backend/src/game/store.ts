@@ -2,6 +2,7 @@ import {GameInstance} from "./types";
 import {ICreateMsg, IJoinMsg} from "../../../common/types";
 import {WebSocket} from "ws";
 import {GameAlreadyExistsError, GameFullError, NoGameFoundError} from "./errors";
+import {DEFAULT_BOARD_STATE} from "../lib/data";
 
 
 /**
@@ -45,15 +46,16 @@ export default class GameStore {
                 board: data.board
             },
             gameTitle: data.gameTitle,
+            currentState: DEFAULT_BOARD_STATE,
+            currentTurn: Math.random() > 0.5 ? "host" : "guest", // Select at random who  starts
         });
     }
 
     /**
      * Join a game, if game doesn't exist or already has 2 players, throw an error
-     * @param gameID
      * @param data
      */
-    static joinGame(gameID: string, data: IJoinMsg & { ws: WebSocket }) {
+    static joinGame(data: IJoinMsg & { ws: WebSocket }) {
         if (!this.hasGame(data.gameID)) {
             throw new NoGameFoundError();
         }

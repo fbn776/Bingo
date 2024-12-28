@@ -1,4 +1,4 @@
-import sendMsg from "@/lib/utils.ts";
+import sendMsg, {mapUserBoardToBoardState} from "@/lib/utils.ts";
 import {IJoinMsg} from "../../../../common/types.ts";
 import {DEFAULT_BOARD} from "@/lib/data.ts";
 import {gameEvents} from "@/logic/init.ts";
@@ -25,20 +25,23 @@ export function JoinGame() {
         });
 
         const data = await gameEvents.waitFor('join-reply');
+
         console.log("ack data:", data);
 
 
-        if(data.subtype === "error") {
+        if (data.subtype === "error") {
             toast.error(data.msg);
         } else {
             toast.success("Joined game");
 
             setCurrCtx({
+                currentTurn: data.data.currentTurn,
                 gameID: gameID,
                 youAre: 'guest', // Joining the game, so set it to guest
                 gameTitle: data.data.gameTitle,
                 guest: username!, // You are the guest
-                host: data.data.host
+                host: data.data.host,
+                currBoardState: mapUserBoardToBoardState(selectedBoard!),
             });
 
             navigate('/game');

@@ -8,6 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import {cn} from "@/lib/utils.ts";
 
 export function CustomDialog({
                                  open,
@@ -34,7 +35,7 @@ export function CustomDialog({
         <Dialog modal open={open} onOpenChange={(e) => {
             setOpen(e);
         }}>
-            <DialogContent className={contentClassName} aria-describedby={describedby || ''}>
+            <DialogContent className={cn("overflow-auto max-sm:max-w-[90%] max-sm:max-h-[90%]", contentClassName)} aria-describedby={describedby || ''}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && <DialogDescription>

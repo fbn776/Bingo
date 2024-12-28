@@ -1,4 +1,5 @@
 import WebSocket from "ws";
+import {TLocalBoardCell} from "../../../common/types";
 
 export type TPlayer = {
     ws: WebSocket,
@@ -25,7 +26,7 @@ export interface GameInstance {
      *
      * Each number in the board (1 to 25) and a boolean value to indicate if it has been selected
      * */
-    currentState?: {[key: number]: boolean}
+    currentState: TLocalBoardCell[]
 }
 
 

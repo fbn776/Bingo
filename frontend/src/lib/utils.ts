@@ -1,6 +1,8 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
 import {toast} from "sonner";
+import {TBoard} from "@/lib/context/app/useAppCtx.ts";
+import {TLocalBoardCell} from "../../../common/types.ts";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -107,4 +109,12 @@ export function checkForDuplicatesAndWhere<T>(arr: T[]): number[] {
  */
 export function getObjectEntries<T extends string | number, F>(obj: Record<T, F>): [T, F][] {
     return Object.entries(obj) as [T, F][];
+}
+
+/**
+ * Converts the user select board of type `TBoard` to `TLocalBoardCell[]`
+ * @param selectedBoard
+ */
+export function mapUserBoardToBoardState(selectedBoard: TBoard): TLocalBoardCell[] {
+    return selectedBoard?.board.map((item) => ({num: item, selected: false})) || []
 }

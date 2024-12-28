@@ -1,5 +1,5 @@
 export interface IMessage {
-    type: "error" | "ack" | "create" | "join" | "player-joined";
+    type: "error" | "ack" | "create" | "join" | "player-joined" | "move" | "info-move";
 }
 
 /** Message representing an error*/
@@ -42,4 +42,29 @@ export interface IJoinMsg extends IMessage {
 export interface IPlayerJoined extends IMessage {
     type: "player-joined",
     guestName: string
+}
+
+/**
+ * Used by the playing player to send msg to the backend to inform that the player has selected a cell
+ */
+export interface IPlayerMove extends IMessage {
+    gameID: string,
+    type: "move",
+    /** What's the selected cell (number)*/
+    selected: number,
+    by: "host" | "guest"
+}
+
+/**
+ * Used by the backend to inform the other player that the playing player has selected a cell
+ */
+export interface IInformOtherPlayersMove extends IMessage {
+    type: "info-move",
+    selected: number,
+}
+
+/** The type format of a board state*/
+export type TLocalBoardCell = {
+    num: number,
+    selected: boolean
 }

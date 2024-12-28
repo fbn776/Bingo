@@ -34,106 +34,108 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
     }, [edit]);
 
     return <CustomDialog
-        contentClassName="w-fit"
+        contentClassName="w-fit max-sm:p-0 m-0"
         title="Create Board"
         open={dialogOpen}
         setOpen={setDialogOpen}
         closeBtn={false}
     >
-        <form className="flex flex-col mt-4" onSubmit={(e) => {
-            e.preventDefault();
+        <form className="flex flex-col mt-4"
+              onSubmit={(e) => {
+                  e.preventDefault();
 
-            // Reset board error on submit
-            setBoardError(EMPTY_ERRORS);
+                  // Reset board error on submit
+                  setBoardError(EMPTY_ERRORS);
 
-            const filled = boardPattern.every((cell) => !isNaN(cell));
+                  const filled = boardPattern.every((cell) => !isNaN(cell));
 
-            if (!filled) {
-                toast.error("Please fill all the cells");
-                return;
-            }
+                  if (!filled) {
+                      toast.error("Please fill all the cells");
+                      return;
+                  }
 
-            const correctBound = boardPattern.every((cell) => {
-                if (cell >= 1 && cell <= 25) {
-                    return true
-                }
+                  const correctBound = boardPattern.every((cell) => {
+                      if (cell >= 1 && cell <= 25) {
+                          return true
+                      }
 
-                toast.error("Please fill all the cells with numbers between 1 and 25");
-                return false;
-            });
+                      toast.error("Please fill all the cells with numbers between 1 and 25");
+                      return false;
+                  });
 
-            if (!correctBound) {
-                return;
-            }
+                  if (!correctBound) {
+                      return;
+                  }
 
-            // Check for duplicates
-            const duplicates = checkForDuplicatesAndWhere(boardPattern);
-            if (duplicates.length > 0) {
-                setBoardError((prev) => {
-                    return prev.map((_, j) => {
-                        if (duplicates.includes(j)) {
-                            return "border-red-500";
-                        }
+                  // Check for duplicates
+                  const duplicates = checkForDuplicatesAndWhere(boardPattern);
+                  if (duplicates.length > 0) {
+                      setBoardError((prev) => {
+                          return prev.map((_, j) => {
+                              if (duplicates.includes(j)) {
+                                  return "border-red-500";
+                              }
 
-                        return "";
-                    });
-                });
+                              return "";
+                          });
+                      });
 
-                toast.error("Please fill all the cells with unique numbers");
-                return;
-            }
+                      toast.error("Please fill all the cells with unique numbers");
+                      return;
+                  }
 
 
-            const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
-            if (!title) {
-                toast.error("Please enter a title");
-                return;
-            }
+                  const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
+                  if (!title) {
+                      toast.error("Please enter a title");
+                      return;
+                  }
 
-            if (!edit) {
-                setBoards((prev) => [...prev, {
-                    timestamp: Date.now(),
-                    title,
-                    board: boardPattern,
-                    id: generateRandomID()
-                }]);
-            } else {
-                setBoards((prev) => {
-                    return prev.map((cell) => {
-                        if (cell.id === edit.id) {
-                            return {
-                                ...cell,
-                                title,
-                                board: boardPattern
-                            }
-                        }
+                  if (!edit) {
+                      setBoards((prev) => [...prev, {
+                          timestamp: Date.now(),
+                          title,
+                          board: boardPattern,
+                          id: generateRandomID()
+                      }]);
+                  } else {
+                      setBoards((prev) => {
+                          return prev.map((cell) => {
+                              if (cell.id === edit.id) {
+                                  return {
+                                      ...cell,
+                                      title,
+                                      board: boardPattern
+                                  }
+                              }
 
-                        return cell;
-                    });
-                });
+                              return cell;
+                          });
+                      });
 
-                // If edited is the selected board, then update it also
-                if(edit.id === selectedBoard?.id) {
-                    setSelectedBoard((prev) => ({
-                        ...prev!,
-                        title,
-                        board: boardPattern
-                    }));
-                }
+                      // If edited is the selected board, then update it also
+                      if (edit.id === selectedBoard?.id) {
+                          setSelectedBoard((prev) => ({
+                              ...prev!,
+                              title,
+                              board: boardPattern
+                          }));
+                      }
 
-                // Reset edit data
-                setEdit(null);
-            }
+                      // Reset edit data
+                      setEdit(null);
+                  }
 
-            setDialogOpen(false);
-            toast.success(edit ? "Board updated" : "Board created successfully");
-        }}>
+                  setDialogOpen(false);
+                  toast.success(edit ? "Board updated" : "Board created successfully");
+              }}>
             <label htmlFor="title">Board name</label>
             <input type="text" name="title" className="border-2 px-2 py-3 rounded-lg mt-1 mb-3"
                    placeholder="Enter the board title" value={name} onChange={(e) => setName(e.target.value)} required/>
 
             <label>Board: </label>
-            <div className="my-4 grid grid-cols-5 grid-rows-5 items-center justify-items-center gap-y-4">
+            <div
+                className="my-4 grid grid-cols-5 grid-rows-5 items-center justify-items-center gap-y-4">
                 {boardPattern.map((_, j) => {
                     return <input key={j}
                                   value={boardPattern[j]}
@@ -146,7 +148,7 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                                       setBoardError(EMPTY_ERRORS);
                                   }}
                                   placeholder={`${j + 1}`} required
-                                  className={cn(boardError[j], "border-2 rounded text-center aspect-square w-[60px] max-sm:w-[50px]")}
+                                  className={cn(boardError[j], "border-2 rounded text-center aspect-square w-[60px] max-sm:w-[40px]")}
                                   max={25} min={1} type="number"
                     />
                 })}
@@ -165,7 +167,7 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                 </button>
             </div>
 
-            <div className="mt-2 flex gap-4 justify-start max-sm:justify-start max-sm:flex-col flex-row-reverse">
+            <div className="w-full mt-2 flex gap-4 justify-start max-sm:justify-start max-sm:flex-col flex-row-reverse">
                 <button type="submit" className="bg-blue-500 px-4 py-2 rounded text-white">
                     {edit ? 'Save' : 'Create'}
                 </button>
