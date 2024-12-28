@@ -100,3 +100,11 @@ export function checkForDuplicatesAndWhere<T>(arr: T[]): number[] {
 
     return repeatedIndices;
 }
+
+/**
+ * Get the entries of an object
+ * @param obj
+ */
+export function getObjectEntries<T extends string | number, F>(obj: Record<T, F>): [T, F][] {
+    return Object.entries(obj) as [T, F][];
+}

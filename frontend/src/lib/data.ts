@@ -1,4 +1,4 @@
-import {TBoard} from "@/lib/context/app/AppCtx.ts";
+import {TBoard} from "@/lib/context/app/useAppCtx.ts";
 import {generateRandomID} from "@/lib/utils.ts";
 
 export const STORE_KEY = {

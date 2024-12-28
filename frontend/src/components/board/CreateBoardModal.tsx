@@ -5,7 +5,7 @@ import {toast} from "sonner";
 import {checkForDuplicatesAndWhere, cn, generateRandomID, shuffleArray} from "@/lib/utils.ts";
 import RandomDiceIcon from "@/components/icons/RandomIcon.tsx";
 import EraseIcon from "@/components/icons/EraseIcon.tsx";
-import {TBoard} from "@/lib/context/app/AppCtx.ts";
+import {TBoard, useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 
 const SourceArr = Array.from({length: 25}, (_, i) => i + 1);
 
@@ -16,12 +16,12 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
     setDialogOpen: (open: boolean) => void,
     setBoards: StateSetter<TBoard[]>,
     edit?: TBoard | null,
-    setEdit: StateSetter<TBoard | null>
+    setEdit: StateSetter<TBoard | null>,
 }) {
     const [boardPattern, setBoardPattern] = useState<number[]>(SourceArr);
     const [name, setName] = useState('');
-
     const [boardError, setBoardError] = useState(EMPTY_ERRORS);
+    const {selectedBoard, setSelectedBoard} = useAppCtx();
 
     useEffect(() => {
         if (edit) {
@@ -111,6 +111,15 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                         return cell;
                     });
                 });
+
+                // If edited is the selected board, then update it also
+                if(edit.id === selectedBoard?.id) {
+                    setSelectedBoard((prev) => ({
+                        ...prev!,
+                        title,
+                        board: boardPattern
+                    }));
+                }
 
                 // Reset edit data
                 setEdit(null);

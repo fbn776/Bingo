@@ -1,26 +1,26 @@
 import sendMsg from "@/lib/utils.ts";
-import {IJoinMsg} from "../../../common/types.ts";
+import {IJoinMsg} from "../../../../common/types.ts";
 import {DEFAULT_BOARD} from "@/lib/data.ts";
 import {gameEvents} from "@/logic/init.ts";
 import {toast} from "sonner";
-import {useGameCtx} from "@/lib/context/game/GameCtx.ts";
-import {useSearchParams} from "react-router";
-import {useCurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
+import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
+import {useNavigate, useParams} from "react-router";
+import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
+import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 
-export function JoinGame({ws, code}: {
-    code?: string | null,
-    ws: WebSocket | null
-}) {
-    const {username, selectedBoard} = useGameCtx();
-    const [, setSearchParams] = useSearchParams();
+export function JoinGame() {
+    const {code} = useParams();
+    const {username, selectedBoard} = useAppCtx();
     const {setCurrCtx} = useCurrGameCtx();
+    const {ws} = useSocketCtx();
+    const navigate = useNavigate();
 
     async function onJoin(gameID: string) {
         console.log("Sending msg")
         sendMsg<IJoinMsg>(ws!, {
             type: "join",
             gameID: gameID,
-            board: selectedBoard?.board || DEFAULT_BOARD,
+            board: selectedBoard?.board || DEFAULT_BOARD.board,
             guestName: username!
         });
 
@@ -39,9 +39,9 @@ export function JoinGame({ws, code}: {
                 gameTitle: data.data.gameTitle,
                 guest: username!, // You are the guest
                 host: data.data.host
-            })
+            });
 
-            setSearchParams({type: "start"});
+            navigate('/game');
         }
     }
 

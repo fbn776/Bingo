@@ -1,8 +1,7 @@
-import {ReactNode, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
 import {DEFAULT_BOARD, STORE_KEY} from "@/lib/data.ts";
-import {TBoard} from "@/lib/context/app/AppCtx.ts";
-import {AppCtx} from "@/lib/context/app/AppCtx.ts";
+import {TBoard, UseAppCtx} from "@/lib/context/app/useAppCtx.ts";
 
 export function AppCtxProvider({children}: {
     children: ReactNode;
@@ -12,16 +11,22 @@ export function AppCtxProvider({children}: {
     const [selectedBoard, setSelectedBoard] = useLocalStorage<TBoard | null>(STORE_KEY.currentBoard, DEFAULT_BOARD);
     const [showBoardsWindow, setShowBoardsWindow] = useState(false);
 
-    console.log("SELECTED", selectedBoard);
+    useEffect(() => {
+        if (!boards.some((board) => {
+            return selectedBoard?.id === board.id;
+        })) {
+            setSelectedBoard(boards[0]);
+        }
+    }, [boards, selectedBoard?.id, setSelectedBoard]);
 
     return (
-        <AppCtx.Provider value={{
+        <UseAppCtx.Provider value={{
             username, setUsername,
             boards, setBoards,
             selectedBoard, setSelectedBoard,
             showBoardsWindow, setShowBoardsWindow,
         }}>
             {children}
-        </AppCtx.Provider>
+        </UseAppCtx.Provider>
     );
 }

@@ -10,7 +10,7 @@ export interface ICurrGame {
 }
 
 interface ICurrGameCtx extends ICurrGame {
-    setCurrCtx: StateSetter<ICurrGame>
+    setCurrCtx: StateSetter<ICurrGame>,
 }
 
 export const CurrGameCtx = createContext<ICurrGameCtx | undefined>(undefined);
@@ -20,10 +20,12 @@ export const CurrGameCtx = createContext<ICurrGameCtx | undefined>(undefined);
  *
  * @returns {ICurrGameCtx} The game context
  */
-export const useCurrGameCtx = (): ICurrGameCtx => {
+const useCurrGameCtx = (): ICurrGameCtx => {
     const context = useContext(CurrGameCtx);
     if (!context) {
         throw new Error("use ctx must be used within the ctx provider");
     }
     return context;
 };
+
+export default useCurrGameCtx;

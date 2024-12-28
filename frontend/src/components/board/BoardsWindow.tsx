@@ -4,7 +4,7 @@ import EditIcon from "@/components/icons/EditIcon.tsx";
 import PlusIcon from "@/components/icons/PlusIcon.tsx";
 import {CreateBoardModal} from "@/components/board/CreateBoardModal.tsx";
 import {IconHeart, IconHeartFilled, IconTrash, IconX} from "@tabler/icons-react";
-import {TBoard, useAppCtx} from "@/lib/context/app/AppCtx.ts";
+import {TBoard, useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 import {toast} from "sonner";
 
 
@@ -12,13 +12,6 @@ export default function BoardsWindow() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const {boards, setBoards, selectedBoard, setSelectedBoard, showBoardsWindow, setShowBoardsWindow} = useAppCtx();
     const [editData, setEditData] = useState<TBoard | null>(null);
-
-    // If there isn't any board selected, select the first one.
-    if(!boards.some((board) => {
-        return selectedBoard?.id === board.id;
-    })) {
-        setSelectedBoard(boards[0]);
-    }
 
     return showBoardsWindow && <>
         <main className="fixed inset-0 flex size-full items-center justify-center">
@@ -93,7 +86,11 @@ export default function BoardsWindow() {
                 </button>
             </div>
         </main>
-        <CreateBoardModal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} setBoards={setBoards} edit={editData}
-                          setEdit={setEditData}/>
+        <CreateBoardModal dialogOpen={dialogOpen}
+                          setDialogOpen={setDialogOpen}
+                          setBoards={setBoards}
+                          edit={editData}
+                          setEdit={setEditData}
+        />
     </>
 }

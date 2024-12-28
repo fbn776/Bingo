@@ -1,6 +1,5 @@
 import {ReactNode, useState} from "react";
-import {CurrGameCtx, ICurrGame} from "@/lib/context/currentGame/CurrentGameCtx.ts";
-
+import {CurrGameCtx, ICurrGame} from "@/lib/context/currentGame/useCurrGameCtx.ts";
 
 export function CurrentGameCtxProvider({children}: {
     children: ReactNode;
@@ -11,7 +10,7 @@ export function CurrentGameCtxProvider({children}: {
         gameID: '',
         gameTitle: '',
         guest: '',
-    })
+    });
 
     return (
         <CurrGameCtx.Provider value={{...currCtx, setCurrCtx}}>

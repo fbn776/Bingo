@@ -1,4 +1,4 @@
-import {useAppCtx} from "@/lib/context/app/AppCtx.ts";
+import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 
 export function AskForName() {
     const {username, setUsername} = useAppCtx();

@@ -2,10 +2,10 @@ import {useEffect, useState} from "react";
 import {WEBSOCKET_URL} from "@/lib/data.ts";
 import {gameEvents} from "@/logic/init.ts";
 import {IMessage} from "../../../../common/types.ts";
-import {useCurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
+import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import {toast} from "sonner";
 
-export type TGameStatus = 'creating' | 'created-and-acked' | 'waiting' | 'on-create' | 'on-join' | 'initial'
+// export type TGameStatus = 'creating' | 'created-and-acked' | 'waiting' | 'on-create' | 'on-join' | 'initial'
 
 export default function useSocket(events: typeof gameEvents) {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState<'disconnected' | 'connected' | 'error'>('disconnected');

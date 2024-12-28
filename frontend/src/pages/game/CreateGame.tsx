@@ -4,23 +4,22 @@ import {toast} from "sonner";
 import CopyIcon from "@/components/icons/CopyIcon.tsx";
 import RetryIcon from "@/components/icons/RetryIcon.tsx";
 import Spinner from "@/components/ui/spinner.tsx";
-import {ICreateMsg} from "../../../common/types.ts";
+import {ICreateMsg} from "../../../../common/types.ts";
 import {DEFAULT_BOARD} from "@/lib/data.ts";
 import {gameEvents} from "@/logic/init.ts";
-import {useGameCtx} from "@/lib/context/game/GameCtx.ts";
-import {useSearchParams} from "react-router";
-import {StateSetter} from "@/lib/types.ts";
-import {useCurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
+import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
+import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
+import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
+import {useNavigate} from "react-router";
 
-export function CreateGame({ws, setDialogOpen}: {
-    ws: WebSocket | null,
-    setDialogOpen: StateSetter<boolean>
-}) {
-    const [, setSearchParams] = useSearchParams();
+
+export function CreateGame() {
     const [gameID, setGameID] = useState(generateRandomID());
     const [loading, setLoading] = useState(false);
-    const {username, selectedBoard} = useGameCtx();
+    const {username, selectedBoard} = useAppCtx();
     const {setCurrCtx} = useCurrGameCtx();
+    const {ws} = useSocketCtx();
+    const navigate = useNavigate();
 
     async function onCreate(title: string, gameID: string) {
         sendMsg<ICreateMsg>(ws!, {
@@ -28,14 +27,13 @@ export function CreateGame({ws, setDialogOpen}: {
             gameID: gameID,
             hostName: username!,
             gameTitle: title,
-            board: selectedBoard?.board || DEFAULT_BOARD
+            board: selectedBoard?.board || DEFAULT_BOARD.board
         });
 
         await gameEvents.waitFor('create-reply');
 
-        setDialogOpen(true);
         // Change URL to main game
-        setSearchParams({type: "start"});
+        navigate('/game');
 
         // Set info for the game
         setCurrCtx({

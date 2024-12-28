@@ -35,7 +35,7 @@ interface TAppCtx {
     setShowBoardsWindow: StateSetter<boolean>;
 }
 
-export const AppCtx = createContext<TAppCtx | undefined>(undefined);
+export const UseAppCtx = createContext<TAppCtx | undefined>(undefined);
 
 /**
  * The main game's context, helps to control the app/game. Controls or stores global data like the
@@ -43,7 +43,7 @@ export const AppCtx = createContext<TAppCtx | undefined>(undefined);
  * @returns {TAppCtx} The game context
  */
 export const useAppCtx = (): TAppCtx => {
-    const context = useContext(AppCtx);
+    const context = useContext(UseAppCtx);
     if (!context) {
         throw new Error("useUser must be used within a UserProvider");
     }

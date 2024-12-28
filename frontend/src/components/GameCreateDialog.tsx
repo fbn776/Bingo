@@ -3,7 +3,7 @@ import {useLocation} from "react-router";
 import {useEffect} from "react";
 import {copyText} from "@/lib/utils.ts";
 import CopyIcon from "@/components/icons/CopyIcon.tsx";
-import {useCurrGameCtx} from "@/lib/context/currentGame/CurrentGameCtx.ts";
+import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 
 export function GameCreateDialog({setClose}: {
     setClose: StateSetter<boolean>
@@ -12,7 +12,7 @@ export function GameCreateDialog({setClose}: {
 
     const location = useLocation();
     const baseURL = window.location.origin;
-    const currentURL = `${baseURL}${location.pathname}?type=join&gameID=${gameID}`;
+    const currentURL = `${baseURL}${location.pathname}/join/${gameID}`;
 
     useEffect(() => {
         const closeIfEscape = (e: KeyboardEvent) => {

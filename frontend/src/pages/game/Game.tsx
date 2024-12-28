@@ -1,25 +1,9 @@
-import {useSearchParams} from "react-router";
-import {CreateGame} from "@/components/CreateGame.tsx";
-import {JoinGame} from "@/components/JoinGame.tsx";
-import {useState} from "react";
-import {GameCreateDialog} from "@/components/GameCreateDialog.tsx";
-import {MainGame} from "@/components/MainGame.tsx";
+import {Outlet} from "react-router";
 import Spinner from "@/components/ui/spinner.tsx";
-import useSocket from "@/lib/hooks/useSocket.ts";
-import {AskForName} from "@/components/AskForName.tsx";
-import {gameEvents} from "@/logic/init.ts";
+import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 
 export default function Game() {
-    const [searchParams] = useSearchParams();
-    let type = searchParams.get("type") as ('create' | 'join' | 'start');
-    if (type !== "create" && type !== "start")
-        type = "join";
-
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const {
-        ws,
-        socketConnectionStatus,
-    } = useSocket(gameEvents);
+    const {socketConnectionStatus} = useSocketCtx();
 
     return <>
         <main className="size-full">
@@ -31,11 +15,12 @@ export default function Game() {
                         {socketConnectionStatus === "error" ? "An error occurred :(" : "Connecting to server..."}
                     </h1>
                 </div>}
-            {dialogOpen && <GameCreateDialog setClose={setDialogOpen}/>}
-            {type === "create" && <CreateGame setDialogOpen={setDialogOpen} ws={ws}/>}
-            {type === "join" && <JoinGame ws={ws} code={searchParams.get('gameID')}/>}
-            {type === "start" && <MainGame setDialogOpen={setDialogOpen}/>}
+
+            <Outlet/>
+
+            {/*{type === "create" && <CreateGame setDialogOpen={setDialogOpen} ws={ws}/>}*/}
+            {/*{type === "join" && <JoinGame ws={ws} code={searchParams.get('gameID')}/>}*/}
+            {/*{type === "start" && <MainGame setDialogOpen={setDialogOpen}/>}*/}
         </main>
-        <AskForName/>
     </>
 }

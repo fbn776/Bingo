@@ -1,9 +1,8 @@
 import {Link} from "react-router";
-import Board from "@/components/board/Board.tsx";
-import {useState} from "react";
+import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 
 export default function Home() {
-    const [showBoard, setShowBoard] = useState(false);
+    const {setShowBoardsWindow} = useAppCtx();
 
     return (
         <>
@@ -17,33 +16,28 @@ export default function Home() {
                     <div className="flex-1 flex flex-col justify-center items-center gap-5">
                         <Link
                             className="primary-button w-[180px]"
-                            to={{
-                                pathname: "/game",
-                                search: "?type=create",
-                            }}
+                            to="/game/create"
                         >
                             Create a game
                         </Link>
                         <Link
                             className="primary-button w-[180px]"
-                            to={{
-                                pathname: "/game",
-                                search: "?type=join",
-                            }}
+                            to="/game/join"
                         >
                             Join a game
                         </Link>
 
                         <button
                             className="primary-button w-[180px]"
-                            onClick={() => setShowBoard(true)}
+                            onClick={() => {
+                                setShowBoardsWindow(true);
+                            }}
                         >
                             Board
                         </button>
                     </div>
                 </div>
             </main>
-            {showBoard && <Board setShowWindow={setShowBoard}/>}
         </>
     );
 }
