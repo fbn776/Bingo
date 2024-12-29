@@ -2,8 +2,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import Logger from "./lib/Logger";
-import WebSocket from "ws";
 import initGame from "./game/main";
+import http from "http";
+import {Server as WebSocketServer} from "ws";
 
 require('dotenv').config();
 
@@ -17,12 +18,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+const server = http.createServer(app);
 
-const WS_PORT = parseInt(process.env.WS_PORT || '');
-if (!WS_PORT)
-    throw new Error('No WS_PORT specified');
-
-const wss = new WebSocket.Server({ port:  WS_PORT });
+const wss = new WebSocketServer({server});
 
 initGame(wss);
 
@@ -31,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
     Logger.success(`Server started on port ${PORT}`);
     Logger.info(`http://localhost:${PORT}`);
 });
