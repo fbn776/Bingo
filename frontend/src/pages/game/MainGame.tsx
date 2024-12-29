@@ -17,16 +17,19 @@ function HUD({youAre, guest, host, currentTurn}: {
     currentTurn: "guest" | "host"
 }) {
     return <div className="flex items-start justify-between w-full">
-        <div className={`rounded-br-xl p-5 w-[40%] ${currentTurn === youAre ? 'bg-blue-200' : 'bg-white'} shadow-xl`}>
+        <div
+            className={`rounded-br-xl p-5 w-[40%] max-sm:w-[48%] ${currentTurn === youAre ? 'bg-blue-200' : 'bg-white'} shadow-xl`}>
             <div className="text-3xl flex items-center gap-1">
                 {currentTurn === youAre ? <FilledUserIcon size="30"/> : <UserIcon size="30"/>}
-                <span>{youAre === 'guest' ? guest : host}</span>
+                <span className="truncate max-sm:text-xl">{youAre === 'guest' ? guest : host}</span>
             </div>
         </div>
 
-        <div className={`rounded-bl-xl p-5 w-[40%] shadow-xl ${currentTurn !== youAre ? 'bg-blue-200' : 'bg-white'}`}>
+        <div
+            className={`rounded-bl-xl p-5 w-[40%] max-sm:w-[48%] shadow-xl ${currentTurn !== youAre ? 'bg-blue-200' : 'bg-white'}`}>
             <div className="text-3xl flex items-center gap-1 justify-end">
-                <span>{youAre === 'guest' ? host : (guest || '-------')}</span>
+                <span
+                    className="truncate max-sm:text-xl text-right">{youAre === 'guest' ? host : (guest || '-------')}</span>
                 {currentTurn !== youAre ? <FilledUserIcon size="30"/> : <UserIcon size="30"/>}
             </div>
         </div>
@@ -49,6 +52,10 @@ export function MainGame() {
         }
     }, []);
 
+    useEffect(() => {
+        setDialogOpen(false);
+    }, [guest]);
+
     console.log("CURRENT TURN:", currentTurn, "BINGO:", noOfBingo);
 
     return <>
@@ -65,13 +72,16 @@ export function MainGame() {
             <div className="relative rounded-md flex justify-center">
                 {currentTurn !== youAre && <div className="absolute size-full z-10 cursor-wait bg-black opacity-20"/>}
                 {currentTurn !== youAre &&
-                    <div className="flex absolute top-[-50px] bg-white rounded-md shadow px-4 py-2 h-[40px]">
-                        <Spinner className="mr-2"/>Waiting for <span
-                        className="bg-gray-300 rounded-md mx-1 px-1">{(currentTurn === "guest" ? guest : host).trim()}</span> to
-                        play
+                    <div className="flex absolute top-[-50px] bg-white rounded-md shadow px-4 py-2 h-[40px] w-fit">
+                        <Spinner className="mr-2"/>
+                        Waiting for
+                        <span className="bg-gray-300 rounded-md mx-1 px-1">
+                            {(currentTurn === "guest" ? guest : host).trim().substring(0, 10)}
+                        </span>
+                        to play
                     </div>
                 }
-                <div className="game-board grid grid-cols-5 grid-rows-5 ">
+                <div className="game-board grid grid-cols-5 grid-rows-5">
                     {currBoardState.map((cell, j) => {
                         return <button
                             className={cell.selected ? "selected" : ""} key={j}
@@ -108,7 +118,7 @@ export function MainGame() {
                 </div>
             </div>
 
-            <div className="text-5xl absolute bottom-[40px] bingo-text">
+            <div className="text-5xl absolute bottom-[40px] max-sm:bottom-[80px] bingo-text">
                 <span className="selected">{"BINGO".substring(0, noOfBingo)}</span>
                 {"BINGO".substring(noOfBingo)}
 

@@ -6,6 +6,7 @@ import {checkForDuplicatesAndWhere, cn, generateRandomID, shuffleArray} from "@/
 import RandomDiceIcon from "@/components/icons/RandomIcon.tsx";
 import EraseIcon from "@/components/icons/EraseIcon.tsx";
 import {TBoard, useAppCtx} from "@/lib/context/app/useAppCtx.ts";
+import {IconPencil} from "@tabler/icons-react";
 
 const SourceArr = Array.from({length: 25}, (_, i) => i + 1);
 
@@ -22,6 +23,8 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
     const [name, setName] = useState('');
     const [boardError, setBoardError] = useState(EMPTY_ERRORS);
     const {selectedBoard, setSelectedBoard} = useAppCtx();
+    const [editMode, setEditMode] = useState(false);
+    const [editCounter, setEditCounter] = useState(1);
 
     useEffect(() => {
         if (edit) {
@@ -30,17 +33,18 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
         } else {
             setBoardPattern(SourceArr);
             setName('');
+            setEditCounter(1);
         }
     }, [edit]);
 
     return <CustomDialog
-        contentClassName="w-fit max-sm:p-0 m-0"
+        contentClassName="w-fit m-0 scrollbar-hidden"
         title="Create Board"
         open={dialogOpen}
         setOpen={setDialogOpen}
         closeBtn={false}
     >
-        <form className="flex flex-col mt-4"
+        <form className="mt-4"
               onSubmit={(e) => {
                   e.preventDefault();
 
@@ -129,28 +133,49 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                   setDialogOpen(false);
                   toast.success(edit ? "Board updated" : "Board created successfully");
               }}>
-            <label htmlFor="title">Board name</label>
-            <input type="text" name="title" className="border-2 px-2 py-3 rounded-lg mt-1 mb-3"
-                   placeholder="Enter the board title" value={name} onChange={(e) => setName(e.target.value)} required/>
+            <label htmlFor="title">Board name</label><br/>
+            <input type="text" name="title" className="border-2 px-2 py-3 rounded-lg mt-1 mb-3 max-sm:max-w-[250px]"
+                   placeholder="Enter the board title" value={name} onChange={(e) => setName(e.target.value)} required/><br/>
 
             <label>Board: </label>
             <div
                 className="my-4 grid grid-cols-5 grid-rows-5 items-center justify-items-center gap-y-4">
                 {boardPattern.map((_, j) => {
-                    return <input key={j}
-                                  value={boardPattern[j]}
-                                  onChange={(e) => {
-                                      const newPattern = [...boardPattern];
-                                      newPattern[j] = parseInt(e.target.value);
-                                      setBoardPattern(newPattern);
+                    return <div key={j} className="relative rounded overflow-hidden">
+                        {editMode &&
+                            <div
+                                className="absolute inset-0 hover:bg-black hover:bg-opacity-60"
+                                onClick={() => {
+                                    if (boardPattern[j])
+                                        return;
 
-                                      // Reset board error
-                                      setBoardError(EMPTY_ERRORS);
-                                  }}
-                                  placeholder={`${j + 1}`} required
-                                  className={cn(boardError[j], "border-2 rounded text-center aspect-square w-[60px] max-sm:w-[40px]")}
-                                  max={25} min={1} type="number"
-                    />
+                                    const newPattern = [...boardPattern];
+                                    newPattern[j] = editCounter;
+                                    setBoardPattern(newPattern);
+                                    setEditCounter(prev => prev + 1);
+                                }}
+                            />
+                        }
+                        <input
+                            value={boardPattern[j]}
+                            onChange={(e) => {
+                                const newPattern = [...boardPattern];
+                                newPattern[j] = parseInt(e.target.value);
+                                setBoardPattern(newPattern);
+
+                                // Reset board error
+                                setBoardError(EMPTY_ERRORS);
+                            }}
+                            disabled={editMode}
+                            placeholder={`${j + 1}`} required
+                            className={
+                                cn(boardError[j],
+                                    "border-2 text-center flex aspect-square w-[60px] max-sm:w-[40px] disabled:bg-gray-200"
+                                )
+                            }
+                            max={25} min={1} type="number"
+                        />
+                    </div>
                 })}
             </div>
             <div className="flex justify-center gap-4 border-[1px] w-fit m-auto px-2 py-1 rounded-full mb-2">
@@ -165,9 +190,20 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                 }} className="hover:scale-105 hover:text-blue-500">
                     <EraseIcon size="18"/>
                 </button>
-            </div>
 
-            <div className="w-full mt-2 flex gap-4 justify-start max-sm:justify-start max-sm:flex-col flex-row-reverse">
+                <button type="button" onClick={() => {
+                    if (!editMode) {
+                        if (confirm("Clear Board?"))
+                            setBoardPattern(new Array(25).fill(''));
+                        else
+                            return;
+                    }
+                    setEditMode(prev => !prev);
+                }}>
+                    <IconPencil size="18" className={editMode ? "text-blue-500" : ""}/>
+                </button>
+            </div>
+            <div className="w-full mt-3 flex gap-4 flex-col">
                 <button type="submit" className="bg-blue-500 px-4 py-2 rounded text-white">
                     {edit ? 'Save' : 'Create'}
                 </button>

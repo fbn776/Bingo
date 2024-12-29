@@ -17,10 +17,6 @@ export default function Game() {
                 </div>}
 
             <Outlet/>
-
-            {/*{type === "create" && <CreateGame setDialogOpen={setDialogOpen} ws={ws}/>}*/}
-            {/*{type === "join" && <JoinGame ws={ws} code={searchParams.get('gameID')}/>}*/}
-            {/*{type === "start" && <MainGame setDialogOpen={setDialogOpen}/>}*/}
         </main>
     </>
 }

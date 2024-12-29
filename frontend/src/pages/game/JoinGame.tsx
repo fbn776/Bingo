@@ -50,7 +50,7 @@ export function JoinGame() {
     }
 
     return <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="p-6 rounded-lg bg-white max-sm:w-[350px] w-[400px]">
+        <div className="p-6 rounded-lg bg-white max-sm:w-[90%] w-[400px]">
             <h1 className="text-2xl mb-2">Join a game</h1>
             <hr/>
             <form className="flex flex-col mt-4" onSubmit={(e) => {

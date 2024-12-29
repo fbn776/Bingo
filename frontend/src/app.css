@@ -11,7 +11,7 @@
 }
 
 .game-board button {
-    @apply text-center text-3xl p-6 border-2 max-sm:p-5 max-sm:text-2xl;
+    @apply text-center text-3xl p-6 border-2 max-sm:p-4 max-sm:text-xl;
 }
 
 .game-board button:not(.selected) {
