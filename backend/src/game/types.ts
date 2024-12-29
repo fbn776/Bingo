@@ -5,7 +5,8 @@ export type TPlayer = {
     ws: WebSocket,
     name: string,
     /** The player's board format 1 to 25 numbers*/
-    board: number[]
+    board: number[],
+    noOfBingo: number
 }
 
 export interface GameInstance {
@@ -26,7 +27,9 @@ export interface GameInstance {
      *
      * Each number in the board (1 to 25) and a boolean value to indicate if it has been selected
      * */
-    currentState: TLocalBoardCell[]
+    currentState: TLocalBoardCell[],
+
+    /** Flag to indicate if the game is over*/
+    gameOver: boolean,
+    wonBy?: "guest" | "host"
 }
-
-

@@ -1,9 +1,9 @@
-import {IAckMsg, IJoinMsg, IPlayerJoined} from "../../../common/types";
+import {IAckMsg, IJoinMsg, IPlayerJoined} from "../../../../common/types";
 import WebSocket from "ws";
-import Logger from "../lib/Logger";
-import sendMsg from "../lib/utils";
-import GameStore from "./store";
-import {GameFullError, NoGameFoundError} from "./errors";
+import Logger from "../../lib/Logger";
+import sendMsg from "../../lib/utils";
+import GameStore from "../store";
+import {GameFullError, NoGameFoundError} from "../errors";
 
 
 export function joinGame(data: IJoinMsg, ws: WebSocket) {

@@ -1,5 +1,5 @@
 export interface IMessage {
-    type: "error" | "ack" | "create" | "join" | "player-joined" | "move" | "info-move";
+    type: "error" | "ack" | "create" | "join" | "player-joined" | "move" | "info-move" | "say-bingo" | "won-bingo";
 }
 
 /** Message representing an error*/
@@ -58,9 +58,25 @@ export interface IPlayerMove extends IMessage {
 /**
  * Used by the backend to inform the other player that the playing player has selected a cell
  */
-export interface IInformOtherPlayersMove extends IMessage {
+export interface IInformPlayersMove extends IMessage {
     type: "info-move",
     selected: number,
+    noOfBingo: number,
+    currTurn: "host" | "guest",
+    /** Might be redundant as the other current turn if the player who played*/
+    playedBy: "host" | "guest"
+}
+
+export interface ISayBingo extends IMessage {
+    type: "say-bingo",
+    by: "guest" | "host",
+    gameID: string,
+}
+
+export interface IWonBingo extends IMessage {
+    type: "won-bingo",
+    won: "host" | "guest",
+    to: "host" | "guest"
 }
 
 /** The type format of a board state*/

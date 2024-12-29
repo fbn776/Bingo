@@ -1,9 +1,9 @@
-import {IAckMsg, ICreateMsg} from "../../../common/types";
+import {IAckMsg, ICreateMsg} from "../../../../common/types";
 import WebSocket from "ws";
-import gameData from "./store";
-import GameStore from "./store";
-import sendMsg from "../lib/utils";
-import Logger from "../lib/Logger";
+import gameData from "../store";
+import GameStore from "../store";
+import sendMsg from "../../lib/utils";
+import Logger from "../../lib/Logger";
 
 export function createGame(data: ICreateMsg, ws: WebSocket) {
     try {

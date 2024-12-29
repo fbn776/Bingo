@@ -42,6 +42,7 @@ export function JoinGame() {
                 guest: username!, // You are the guest
                 host: data.data.host,
                 currBoardState: mapUserBoardToBoardState(selectedBoard!),
+                noOfBingo: 0
             });
 
             navigate('/game');

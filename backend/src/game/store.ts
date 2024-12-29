@@ -43,11 +43,13 @@ export default class GameStore {
             host: {
                 name: data.hostName,
                 ws: data.ws,
-                board: data.board
+                board: data.board,
+                noOfBingo: 0,
             },
             gameTitle: data.gameTitle,
             currentState: DEFAULT_BOARD_STATE,
             currentTurn: Math.random() > 0.5 ? "host" : "guest", // Select at random who  starts
+            gameOver: false
         });
     }
 
@@ -71,8 +73,10 @@ export default class GameStore {
             guest: {
                 name: data.guestName,
                 ws: data.ws,
-                board: data.board
-            }
+                board: data.board,
+                noOfBingo: 0,
+            },
+            gameOver: false
         });
     }
 }

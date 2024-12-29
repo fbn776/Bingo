@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {WEBSOCKET_URL} from "@/lib/data.ts";
 import {gameEvents} from "@/logic/init.ts";
-import {IMessage} from "../../../../common/types.ts";
+import {IInformPlayersMove, IMessage, IWonBingo} from "../../../../common/types.ts";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import {toast} from "sonner";
 
@@ -9,7 +9,7 @@ import {toast} from "sonner";
 export default function useSocket(events: typeof gameEvents) {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState<'disconnected' | 'connected' | 'error'>('disconnected');
     const [ws, setWs] = useState<WebSocket | null>(null);
-    const {setCurrCtx} = useCurrGameCtx();
+    const {youAre, setCurrCtx} = useCurrGameCtx();
 
     useEffect(() => {
         const ws = new WebSocket(WEBSOCKET_URL);
@@ -21,7 +21,6 @@ export default function useSocket(events: typeof gameEvents) {
 
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            console.log("RECEIVED DATA:", data);
 
             switch (data.type as IMessage["type"]) {
                 case 'ack':
@@ -33,12 +32,14 @@ export default function useSocket(events: typeof gameEvents) {
                         return {...prevState, guest: data.guestName}
                     })
                     break;
-                case "info-move":
+                case "info-move": {
+                    const infoMoveData = data as IInformPlayersMove;
+
                     setCurrCtx(prev => ({
                         ...prev,
-                        currentTurn: prev.currentTurn === "guest" ? "host" : 'guest',
+                        currentTurn: infoMoveData.currTurn,
                         currBoardState: prev.currBoardState.map((item) => {
-                            if(item.num === data.selected) {
+                            if (item.num === infoMoveData.selected) {
                                 return {
                                     num: item.num,
                                     selected: true,
@@ -46,11 +47,25 @@ export default function useSocket(events: typeof gameEvents) {
                             }
 
                             return item;
-                        })
+                        }),
+                        noOfBingo: infoMoveData.noOfBingo
                     }))
                     break;
+                }
+                case "won-bingo": {
+                    const wonData = data as IWonBingo;
+                    console.log("WON DATA", wonData, "YOU ARE:", youAre);
+                    if (wonData.won === data.to) {
+                        toast.success("You won");
+                    } else {
+                        toast.error("You lost");
+                    }
+
+                    break;
+                }
                 default:
                     console.error("Undefined type");
+                    toast.error(data.message || "Invalid data");
                     break;
             }
 
@@ -76,6 +91,5 @@ export default function useSocket(events: typeof gameEvents) {
     return {
         ws, setWs,
         socketConnectionStatus, setSocketConnectionStatus,
-
     }
 }

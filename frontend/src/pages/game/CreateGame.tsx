@@ -45,7 +45,8 @@ export function CreateGame() {
             guest: '',
             host: username!,
             currBoardState: mapUserBoardToBoardState(selectedBoard!),
-            currentTurn: data.data.currentTurn
+            currentTurn: data.data.currentTurn,
+            noOfBingo: 0,
         })
     }
 

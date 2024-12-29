@@ -6,7 +6,6 @@
     @apply bg-custom-primary button hover:scale-110;
 }
 
-
 .game-board {
     @apply rounded-lg bg-white overflow-hidden shadow-xl border-4;
 }
@@ -71,4 +70,22 @@
 
 .game-board button:nth-child(5n+1) {
     @apply border-l-0
+}
+
+.bingo-text {
+    @apply bg-white shadow-lg px-8 py-2 rounded-md flex items-center justify-center;
+    -webkit-text-stroke: 2px rgba(0,0,0,0.2);
+    color: transparent;
+    text-transform: uppercase;
+}
+
+.bingo-text .say-bingo {
+    @apply shadow-lg rounded-md text-xl absolute inset-0 flex items-center justify-center bg-blue-500 px-4 py-2 animate-bounce hover:animate-none hover:bg-blue-700;
+    -webkit-text-stroke: 0 black;
+    text-transform: uppercase;
+    color: white;
+}
+
+.bingo-text .selected {
+    color: black;
 }

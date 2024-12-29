@@ -2,9 +2,10 @@ import WebSocket from "ws";
 import Logger from "../lib/Logger";
 import {IErrorMsg, IMessage} from "../../../common/types";
 import sendMsg from "../lib/utils";
-import {createGame} from "./createGame";
-import {joinGame} from "./joinGame";
-import playGame from "./playGame";
+import {createGame} from "./logic/createGame";
+import {joinGame} from "./logic/joinGame";
+import playGame from "./logic/playGame";
+import saidBingo from "./logic/saidBingo";
 
 
 export default function initGame(wss: WebSocket.Server) {
@@ -27,6 +28,10 @@ export default function initGame(wss: WebSocket.Server) {
                 case 'move':
                     Logger.info('MOVE request');
                     playGame(data, ws);
+                    break;
+                case "say-bingo":
+                    Logger.info(`Player ${data.by} says BINGO`);
+                    saidBingo(data);
                     break;
                 default:
                     sendMsg<IErrorMsg>(ws, {

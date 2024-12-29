@@ -8,7 +8,7 @@ import {useEffect, useState} from "react";
 import {GameCreateDialog} from "@/components/GameCreateDialog.tsx";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 import sendMsg from "@/lib/utils.ts";
-import {IPlayerMove} from "../../../../common/types.ts";
+import {IPlayerMove, ISayBingo} from "../../../../common/types.ts";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -35,23 +35,25 @@ function HUD({youAre, guest, host, currentTurn}: {
 }
 
 export function MainGame() {
-    const {currentTurn, guest, host, youAre, gameID, currBoardState, setCurrCtx} = useCurrGameCtx();
+    const {currentTurn, guest, host, youAre, gameID, noOfBingo, currBoardState, setCurrCtx} = useCurrGameCtx();
     const navigate = useNavigate();
     const [dialogOpen, setDialogOpen] = useState(false);
     const {ws} = useSocketCtx();
 
+    console.log("YOU ARE:", youAre);
+
     useEffect(() => {
         if (!host) {
-            navigate('/game/create');
+            navigate('/');
             return;
         }
     }, []);
 
-    console.log("CURRENT TURN:", currentTurn);
+    console.log("CURRENT TURN:", currentTurn, "BINGO:", noOfBingo);
 
     return <>
         {!guest &&
-            <div className="bg-black fixed z-30 inset-0 flex justify-center items-center bg-opacity-60 flex-col">
+            <div className="bg-black fixed z-50 inset-0 flex justify-center items-center bg-opacity-60 flex-col">
                 <Spinner className="size-[100px] text-white"/>
                 <h1 className="text-white text-2xl mt-10">Waiting for a player to join</h1>
                 <button onClick={() => setDialogOpen(true)} className="button bg-blue-500 shadow mt-3">Share Game
@@ -60,47 +62,69 @@ export function MainGame() {
         }
         <div className="size-full flex flex-col justify-between items-center">
             <HUD youAre={youAre!} guest={guest} host={host} currentTurn={currentTurn!}/>
-            <div className="game-board grid grid-cols-5 grid-rows-5 relative">
-                {currentTurn !== youAre && <div className="absolute size-full z-50 cursor-wait"/>}
-                {currBoardState.map((cell, j) => {
-                    return <button
-                        className={cell.selected ? "selected" : ""} key={j}
-                        onClick={() => {
-                            if (cell.selected || currentTurn !== youAre)
-                                return;
+            <div className="relative rounded-md flex justify-center">
+                {currentTurn !== youAre && <div className="absolute size-full z-10 cursor-wait bg-black opacity-20"/>}
+                {currentTurn !== youAre &&
+                    <div className="flex absolute top-[-50px] bg-white rounded-md shadow px-4 py-2 h-[40px]">
+                        <Spinner className="mr-2"/>Waiting for <span
+                        className="bg-gray-300 rounded-md mx-1 px-1">{(currentTurn === "guest" ? guest : host).trim()}</span> to
+                        play
+                    </div>
+                }
+                <div className="game-board grid grid-cols-5 grid-rows-5 ">
+                    {currBoardState.map((cell, j) => {
+                        return <button
+                            className={cell.selected ? "selected" : ""} key={j}
+                            onClick={() => {
+                                if (cell.selected || currentTurn !== youAre)
+                                    return;
 
-                            setCurrCtx(prev => ({
-                                ...prev,
-                                currentTurn: prev.currentTurn === "guest" ? "host" : 'guest',
-                                currBoardState: prev.currBoardState.map(item => {
-                                    if (item.num === cell.num) {
-                                        return {
-                                            num: item.num,
-                                            selected: true
+                                setCurrCtx(prev => ({
+                                    ...prev,
+                                    currentTurn: prev.currentTurn === "guest" ? "host" : 'guest',
+                                    currBoardState: prev.currBoardState.map(item => {
+                                        if (item.num === cell.num) {
+                                            return {
+                                                num: item.num,
+                                                selected: true
+                                            }
                                         }
-                                    }
-                                    return item;
-                                })
-                            }));
+                                        return item;
+                                    })
+                                }));
 
-                            sendMsg<IPlayerMove>(ws!, {
-                                gameID,
-                                type: "move",
-                                selected: cell.num,
-                                by: youAre!
-                            });
-                        }}
-                        disabled={cell.selected || currentTurn !== youAre}
-                    >
-                        {cell.num}
-                    </button>
-                })}
-            </div>
-            {currentTurn !== youAre &&
-                <div className="flex absolute bottom-10 bg-white rounded-md shadow px-4 py-2">
-                    <Spinner className="mr-2"/>Waiting for <span className="bg-gray-300 rounded-md mx-1 px-1">{(currentTurn === "guest" ? guest : host).trim()}</span> to play
+                                sendMsg<IPlayerMove>(ws!, {
+                                    gameID,
+                                    type: "move",
+                                    selected: cell.num,
+                                    by: youAre!
+                                });
+                            }}
+                            disabled={cell.selected || currentTurn !== youAre}
+                        >
+                            {cell.num}
+                        </button>
+                    })}
                 </div>
-            }
+            </div>
+
+            <div className="text-5xl absolute bottom-[40px] bingo-text">
+                <span className="selected">{"BINGO".substring(0, noOfBingo)}</span>
+                {"BINGO".substring(noOfBingo)}
+
+                {noOfBingo >= 5 &&
+                    <button className="say-bingo" onClick={() => {
+                        sendMsg<ISayBingo>(ws!, {
+                            type: "say-bingo",
+                            by: youAre!,
+                            gameID: gameID!,
+                        })
+                    }}>
+                        Say Bingo
+                    </button>
+                }
+            </div>
+
             <div className="text-right w-full pb-3 pr-3">
                 <button className="rounded-full bg-white p-4 shadow-xl">
                     <ChatIcon/>
