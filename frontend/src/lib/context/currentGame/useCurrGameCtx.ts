@@ -10,7 +10,8 @@ export interface ICurrGame {
     guest: string,
     currBoardState: TLocalBoardCell[],
     currentTurn: "guest" | "host" | null,
-    noOfBingo: number
+    noOfBingo: number,
+    wonBy: "guest" | "host" | null,
 }
 
 interface ICurrGameCtx extends ICurrGame {

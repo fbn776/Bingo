@@ -3,12 +3,13 @@ import UserIcon from "@/components/icons/UserIcon.tsx";
 import ChatIcon from "@/components/icons/ChatIcon.tsx";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import Spinner from "@/components/ui/spinner.tsx";
-import {useNavigate} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 import {GameCreateDialog} from "@/components/GameCreateDialog.tsx";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 import sendMsg from "@/lib/utils.ts";
 import {IPlayerMove, ISayBingo} from "../../../../common/types.ts";
+import {ArrowLeft} from "lucide-react";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -38,12 +39,10 @@ function HUD({youAre, guest, host, currentTurn}: {
 }
 
 export function MainGame() {
-    const {currentTurn, guest, host, youAre, gameID, noOfBingo, currBoardState, setCurrCtx} = useCurrGameCtx();
+    const {wonBy, currentTurn, guest, host, youAre, gameID, noOfBingo, currBoardState, setCurrCtx} = useCurrGameCtx();
     const navigate = useNavigate();
     const [dialogOpen, setDialogOpen] = useState(false);
     const {ws} = useSocketCtx();
-
-    console.log("YOU ARE:", youAre);
 
     useEffect(() => {
         if (!host) {
@@ -67,6 +66,17 @@ export function MainGame() {
                 </button>
             </div>
         }
+
+        {wonBy &&
+            <div
+                className="fixed bg-opacity-60 bg-black backdrop-blur-md inset-0 z-50 flex flex-col items-center justify-center text-white">
+                <h2 className={`text-4xl ${wonBy === youAre ? "text-blue-500" : "text-red-500"}`}>{wonBy === youAre ? "You Won" : "You Lost"}</h2>
+                <Link to="/" className="px-4 py-2 bg-blue-500 rounded-md text-center mt-8 flex gap-1">
+                    <ArrowLeft/> Home
+                </Link>
+            </div>
+        }
+
         <div className="size-full flex flex-col justify-between items-center">
             <HUD youAre={youAre!} guest={guest} host={host} currentTurn={currentTurn!}/>
             <div className="relative rounded-md flex justify-center">

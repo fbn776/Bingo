@@ -14,7 +14,8 @@ export function CurrentGameCtxProvider({children}: {
         guest: '',
         currBoardState: DEFAULT_BOARD_STATE,
         currentTurn: null,
-        noOfBingo: 0
+        noOfBingo: 0,
+        wonBy: null
     });
 
     function setBoard(board: TLocalBoardCell[]) {

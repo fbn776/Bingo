@@ -60,7 +60,10 @@ export default function useSocket(events: typeof gameEvents) {
                     } else {
                         toast.error("You lost");
                     }
-
+                    setCurrCtx(prev => ({
+                       ...prev,
+                       wonBy: wonData.won
+                    }))
                     break;
                 }
                 default:
