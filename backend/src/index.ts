@@ -24,8 +24,8 @@ const wss = new WebSocketServer({server});
 
 initGame(wss);
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
+app.get("/ping", (req, res) => {
+    res.send("Ping from server");
 });
 
 
