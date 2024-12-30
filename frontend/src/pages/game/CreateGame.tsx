@@ -48,6 +48,7 @@ export function CreateGame() {
             currBoardState: mapUserBoardToBoardState(selectedBoard!),
             currentTurn: data.data.currentTurn,
             noOfBingo: 0,
+            wonBy: null
         })
     }
 
