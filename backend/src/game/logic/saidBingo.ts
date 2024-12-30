@@ -12,7 +12,7 @@ export default function saidBingo(data: ISayBingo) {
 
     console.log("SAID BY: ", data.by, "AT", Date.now());
 
-    if(player.noOfBingo < 5 && game!.gameOver) {
+    if(player.noOfBingo < 5 || GameStore.getGame(data.gameID)!.gameOver) {
         sendMsg<IErrorMsg>(player.ws!, {
             type: "error",
             msg: "Invalid move"
