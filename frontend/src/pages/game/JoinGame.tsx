@@ -4,9 +4,10 @@ import {DEFAULT_BOARD} from "@/lib/data.ts";
 import {gameEvents} from "@/logic/init.ts";
 import {toast} from "sonner";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
-import {useNavigate, useParams} from "react-router";
+import {Link, useNavigate, useParams} from "react-router";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
+import {ArrowLeft} from "lucide-react";
 
 export function JoinGame() {
     const {code} = useParams();
@@ -51,7 +52,11 @@ export function JoinGame() {
 
     return <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="p-6 rounded-lg bg-white max-sm:w-[90%] w-[400px]">
-            <h1 className="text-2xl mb-2">Join a game</h1>
+            <h1 className="text-2xl mb-2 flex items-center gap-2">
+                <Link to="/" className="hover:text-blue-500 hover:scale-110"><ArrowLeft/></Link>
+
+                Join a game
+            </h1>
             <hr/>
             <form className="flex flex-col mt-4" onSubmit={(e) => {
                 e.preventDefault();

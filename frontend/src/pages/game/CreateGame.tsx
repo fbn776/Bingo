@@ -10,7 +10,8 @@ import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
-import {useNavigate} from "react-router";
+import {Link, useNavigate} from "react-router";
+import {ArrowLeft} from "lucide-react";
 
 
 export function CreateGame() {
@@ -52,7 +53,10 @@ export function CreateGame() {
 
     return <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="p-6 rounded-lg bg-white max-sm:w-[350px]">
-            <h1 className="text-2xl mb-2">Create a game</h1>
+            <h1 className="text-2xl mb-2 flex gap-2 items-center">
+                <Link to="/" className="hover:text-blue-500 hover:scale-110"><ArrowLeft/></Link>
+                Create a game
+            </h1>
             <hr/>
             <form className="flex flex-col mt-4" onSubmit={(e) => {
                 e.preventDefault();
