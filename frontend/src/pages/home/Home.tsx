@@ -1,8 +1,9 @@
 import {Link} from "react-router";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
+import {User} from "lucide-react";
 
 export default function Home() {
-    const {setShowBoardsWindow} = useAppCtx();
+    const {setShowBoardsWindow, setShowNameWindow} = useAppCtx();
 
     return (
         <>
@@ -34,6 +35,15 @@ export default function Home() {
                             }}
                         >
                             Board
+                        </button>
+
+
+                        <button
+                            onClick={() => {
+                                setShowNameWindow(true);
+                            }}
+                            className="aspect-square rounded-full shadow-xl fixed top-4 right-4 bg-custom-primary text-white p-3 hover:scale-110 transition-transform">
+                            <User/>
                         </button>
                     </div>
                 </div>

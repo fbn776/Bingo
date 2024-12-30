@@ -16,23 +16,23 @@ export type TBoard = {
 interface TAppCtx {
     /** The username of the player */
     username: string | null;
-    /** Set the username of the player*/
     setUsername: StateSetter<string | null>
 
     /** The boards in storage */
     boards: TBoard[];
-    /** Set the boards in storage */
     setBoards: StateSetter<TBoard[]>;
 
     /** The selected board, that is the board which is selected by the player */
     selectedBoard: TBoard | null;
-    /** Set the selected board */
     setSelectedBoard: StateSetter<TBoard | null>;
 
     /** Whether the board window is shown */
     showBoardsWindow: boolean;
-    /** Set whether the board window is shown */
     setShowBoardsWindow: StateSetter<boolean>;
+
+    /** Whether the name window is shown */
+    showNameWindow: boolean;
+    setShowNameWindow: StateSetter<boolean>;
 }
 
 export const UseAppCtx = createContext<TAppCtx | undefined>(undefined);

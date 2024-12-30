@@ -10,6 +10,7 @@ export function AppCtxProvider({children}: {
     const [boards, setBoards] = useLocalStorage<TBoard[]>(STORE_KEY.boards, [DEFAULT_BOARD]);
     const [selectedBoard, setSelectedBoard] = useLocalStorage<TBoard | null>(STORE_KEY.currentBoard, DEFAULT_BOARD);
     const [showBoardsWindow, setShowBoardsWindow] = useState(false);
+    const [showNameWindow, setShowNameWindow] = useState(false);
 
     useEffect(() => {
         if (!boards.some((board) => {
@@ -25,6 +26,7 @@ export function AppCtxProvider({children}: {
             boards, setBoards,
             selectedBoard, setSelectedBoard,
             showBoardsWindow, setShowBoardsWindow,
+            showNameWindow, setShowNameWindow,
         }}>
             {children}
         </UseAppCtx.Provider>

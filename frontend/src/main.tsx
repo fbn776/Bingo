@@ -14,6 +14,7 @@ import {CreateGame} from "@/pages/game/CreateGame.tsx";
 import {JoinGame} from "@/pages/game/JoinGame.tsx";
 import SocketCtxProvider from "@/lib/context/socket/SocketCtxProvider.tsx";
 import {MainGame} from "@/pages/game/MainGame.tsx";
+import CheckForServer from "@/components/CheckForServer.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root')!).render(
             </BrowserRouter>
             <AskForName/>
             <BoardsWindow/>
+            <CheckForServer/>
         </AppCtxProvider>
     </StrictMode>,
 )
