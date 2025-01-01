@@ -1,5 +1,5 @@
 export interface IMessage {
-    type: "error" | "ack" | "create" | "join" | "player-joined" | "move" | "info-move" | "say-bingo" | "won-bingo";
+    type: "error" | "ack" | "create" | "join" | "player-joined" | "move" | "info-move" | "say-bingo" | "won-bingo" | "replay-game";
 }
 
 /** Message representing an error*/
@@ -83,4 +83,16 @@ export interface IWonBingo extends IMessage {
 export type TLocalBoardCell = {
     num: number,
     selected: boolean
+}
+
+
+export interface IReplayGame extends IMessage {
+    type: "replay-game",
+    gameID: string
+}
+
+export interface IReplayGameAck extends IMessage {
+    type: "replay-game",
+    gameID: string,
+    ack: "yes" | "no"
 }

@@ -10,6 +10,8 @@ import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 import sendMsg from "@/lib/utils.ts";
 import {IPlayerMove, ISayBingo} from "../../../../common/types.ts";
 import {ArrowLeft} from "lucide-react";
+import {IconReload} from "@tabler/icons-react";
+import Confetti from 'react-confetti'
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -55,8 +57,6 @@ export function MainGame() {
         setDialogOpen(false);
     }, [guest]);
 
-    console.log("CURRENT TURN:", currentTurn, "BINGO:", noOfBingo);
-
     return <>
         {!guest &&
             <div className="bg-black fixed z-50 inset-0 flex justify-center items-center bg-opacity-60 flex-col">
@@ -70,8 +70,16 @@ export function MainGame() {
         {wonBy &&
             <div
                 className="fixed bg-opacity-60 bg-black backdrop-blur-md inset-0 z-50 flex flex-col items-center justify-center text-white">
-                <h2 className={`text-4xl ${wonBy === youAre ? "text-blue-500" : "text-red-500"}`}>{wonBy === youAre ? "You Won" : "You Lost"}</h2>
-                <Link to="/" className="px-4 py-2 bg-blue-500 rounded-md text-center mt-8 flex gap-1">
+                <h2 className={`text-4xl ${wonBy === youAre ? "text-green-500" : "text-red-500"}`}>{wonBy === youAre ? "You Won" : "You Lost"}</h2>
+                {wonBy === youAre && <Confetti/>}
+
+
+                <button className="shadow-2xl px-8 py-2 bg-blue-500 rounded-md text-center mt-8 flex gap-1" onClick={() => alert("TODO")}>
+                    <IconReload/>
+                    Replay
+                </button>
+
+                <Link to="/" className="px-4 py-2 bg-red-500 rounded-md text-center mt-5 flex gap-1">
                     <ArrowLeft/> Home
                 </Link>
             </div>
