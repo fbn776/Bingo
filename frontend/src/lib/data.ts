@@ -5,7 +5,8 @@ import {TLocalBoardCell} from "../../../common/types.ts";
 export const STORE_KEY = {
     username: "bingo-username",
     boards: "bingo-boards",
-    currentBoard: "bingo-current-board"
+    currentBoard: "bingo-current-board",
+    hasShowSpecial: "bingo-shown-special"
 }
 
 export const WEBSOCKET_URL = import.meta.env.VITE_WS_URL as string;

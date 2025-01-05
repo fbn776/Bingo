@@ -33,6 +33,10 @@ interface TAppCtx {
     /** Whether the name window is shown */
     showNameWindow: boolean;
     setShowNameWindow: StateSetter<boolean>;
+
+    /** Whether the special window has been shown or not*/
+    shownSpecial: boolean;
+    setShownSpecial: StateSetter<boolean>;
 }
 
 export const UseAppCtx = createContext<TAppCtx | undefined>(undefined);

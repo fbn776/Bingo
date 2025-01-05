@@ -4,6 +4,7 @@ import {toast} from "sonner";
 import {StateSetter} from "@/lib/types.ts";
 import {TypeAnimation} from "react-type-animation";
 import {confetti} from "@tsparticles/confetti";
+import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 
 
 const CONFIRM_NAME = import.meta.env.VITE_CONFIRM_NAME;
@@ -68,6 +69,7 @@ export default function Special({setSpecial}: { setSpecial: StateSetter<boolean>
     const [confirmed, setConfirmed] = useState(false);
     const [showMsgCount, setShowMsgCount] = useState(-1);
     const [end, setEnd] = useState(false);
+    const {setShownSpecial} = useAppCtx();
 
     return (
         <>
@@ -154,6 +156,7 @@ export default function Special({setSpecial}: { setSpecial: StateSetter<boolean>
                             end &&
                             <button className="mt-5 w-full py-2 rounded-md bg-green-500 text-white" onClick={() => {
                                 setSpecial(false);
+                                setShownSpecial(true);
                             }}>
                                 Okay, bye✨
                             </button>
@@ -174,14 +177,17 @@ export default function Special({setSpecial}: { setSpecial: StateSetter<boolean>
                     setConfirmed(true);
                     setIsConfoOpen(false);
                     toast.success("Thank you for confirming you name!");
-                }} className="bg-blue-500 text-white py-2 rounded-md">Yes
+                }} className="bg-blue-500 text-white py-2 rounded-md">
+                    Yes
                 </button>
                 <button onClick={() => {
                     setConfirmed(false);
                     setIsConfoOpen(false);
                     toast.info("Thank you for confirming you name!");
-                    setSpecial(false)
-                }} className="bg-red-500 text-white py-2 rounded-md">No
+                    setSpecial(false);
+                    setShownSpecial(true);
+                }} className="bg-red-500 text-white py-2 rounded-md">
+                    No
                 </button>
             </CustomDialog>
         </>

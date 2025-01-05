@@ -9,15 +9,16 @@ const SPECIAL_ENABLED = checkIfSpecial();
 const SPECIAL_NAMES = ((import.meta.env.VITE_SPECIAL_NAME_LIST as string) || "").split(",").map(i => i.trim().toLowerCase());
 
 export function AskForName() {
-    const {username, setUsername, showNameWindow, setShowNameWindow} = useAppCtx();
+    const {username, setUsername, showNameWindow, setShowNameWindow, shownSpecial} = useAppCtx();
     const [special, setSpecial] = useState(false);
 
     useEffect(() => {
-        console.log("user name:", username, "names:", SPECIAL_NAMES, "include:", SPECIAL_NAMES.includes(username!.toLowerCase()))
-        if (SPECIAL_NAMES.length > 0 && SPECIAL_NAMES.includes(username!.toLowerCase())) {
-            setSpecial(true);
+        if (!shownSpecial) {
+            if (SPECIAL_NAMES.length > 0 && SPECIAL_NAMES.includes(username!.toLowerCase())) {
+                setSpecial(true);
+            }
         }
-    }, [username]);
+    }, [shownSpecial, username]);
 
 
     return <>
