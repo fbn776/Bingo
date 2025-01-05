@@ -118,3 +118,21 @@ export function getObjectEntries<T extends string | number, F>(obj: Record<T, F>
 export function mapUserBoardToBoardState(selectedBoard: TBoard): TLocalBoardCell[] {
     return selectedBoard?.board.map((item) => ({num: item, selected: false})) || []
 }
+
+/**
+ * Check if the special features are enabled or not in the app.
+ *
+ * NOTE: This is enabled while deploying
+ */
+export function checkIfSpecial() {
+    return !!(
+        import.meta.env.VITE_SPECIAL_NAME_LIST &&
+        import.meta.env.VITE_CONFIRM_NAME &&
+        import.meta.env.VITE_SPECIAL_NAME_LIST &&
+        import.meta.env.VITE_CONFIRM_NAME &&
+        import.meta.env.VITE_OTHER_NAME &&
+        import.meta.env.VITE_SPECIAL_MSG1 &&
+        import.meta.env.VITE_SPECIAL_MSG2 &&
+        import.meta.env.VITE_SPECIAL_MSG3
+    );
+}
