@@ -21,6 +21,7 @@ import {IconReload} from "@tabler/icons-react";
 import Confetti from 'react-confetti'
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
+import GameChat from "@/components/GameChat.tsx";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -56,8 +57,8 @@ export function MainGame() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [showReplayWindow, setShowReplayWindow] = useState(false);
     const [isWaiting, setIsWaiting] = useState(false);
-
     const {ws} = useSocketCtx();
+    const [showGameChat, setShowGameChat] = useState(true);
 
     useEffect(() => {
         if (!host) {
@@ -77,8 +78,8 @@ export function MainGame() {
         });
 
         const ID2 = gameEvents.on('cancel-replay', () => {
-           setShowReplayWindow(false);
-           setIsWaiting(false);
+            setShowReplayWindow(false);
+            setIsWaiting(false);
         });
 
         const ID3 = gameEvents.on('reset-game', (e) => {
@@ -109,7 +110,8 @@ export function MainGame() {
             <div className="bg-black fixed z-50 inset-0 flex justify-center items-center bg-opacity-60 flex-col">
                 <Spinner className="size-[100px] text-white"/>
                 <h1 className="text-white text-2xl mt-10">Waiting for a player to join</h1>
-                <button onClick={() => setDialogOpen(true)} className="button bg-blue-500 shadow mt-3">Share Game
+                <button onClick={() => setDialogOpen(true)} className="button bg-blue-500 shadow mt-3">
+                    Share Game
                 </button>
             </div>
         }
@@ -269,9 +271,12 @@ export function MainGame() {
             </div>
 
             <div className="text-right w-full pb-3 pr-3">
-                <button className="rounded-full bg-white p-4 shadow-xl">
+                <button className="rounded-full bg-white p-4 shadow-xl" onClick={() => setShowGameChat(true)}>
                     <ChatIcon/>
                 </button>
+                {showGameChat &&
+                    <GameChat/>
+                }
             </div>
         </div>
 

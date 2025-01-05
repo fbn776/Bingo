@@ -94,3 +94,23 @@
     position: fixed;
     inset: 0;
 }
+
+.messages {
+    @apply bg-white rounded-md shadow p-2 max-w-[60%] text-left;
+}
+
+.messages .name {
+
+}
+
+.messages .name {
+    @apply text-[10px] bg-blue-300 rounded p-1 w-fit;
+}
+
+.messages .message {
+    @apply my-2
+}
+
+.messages .time {
+    @apply text-[10px] opacity-60 w-full border-t pt-1
+}

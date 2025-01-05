@@ -4,7 +4,7 @@ import './global.css'
 import './app.css'
 import {BrowserRouter, Route, Routes} from "react-router";
 import Home from "./pages/home/Home.tsx";
-import Game from "@/pages/game/Game.tsx";
+import Layout from "@/pages/game/layout.tsx";
 import {Toaster} from "@/components/ui/sonner.tsx";
 import {AppCtxProvider} from "@/lib/context/app/AppCtxProvider.tsx";
 import {AskForName} from "@/components/AskForName.tsx";
@@ -25,7 +25,7 @@ createRoot(document.getElementById('root')!).render(
                     <Route path="/" element={<Home/>}/>
                     <Route path="/game" element={<CurrentGameCtxProvider>
                         <SocketCtxProvider>
-                            <Game/>
+                            <Layout/>
                         </SocketCtxProvider>
                     </CurrentGameCtxProvider>}>
                         <Route path="" index element={<MainGame/>}/>

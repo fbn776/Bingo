@@ -2,7 +2,7 @@ import {Outlet} from "react-router";
 import Spinner from "@/components/ui/spinner.tsx";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 
-export default function Game() {
+export default function Layout() {
     const {socketConnectionStatus} = useSocketCtx();
 
     return <>
