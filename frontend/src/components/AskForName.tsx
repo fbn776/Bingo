@@ -10,7 +10,7 @@ const SPECIAL_NAMES = ((import.meta.env.VITE_SPECIAL_NAME_LIST as string) || "")
 
 export function AskForName() {
     const {username, setUsername, showNameWindow, setShowNameWindow} = useAppCtx();
-    const [special, setSpecial] = useState(true);
+    const [special, setSpecial] = useState(false);
 
     useEffect(() => {
         if(SPECIAL_NAMES.length > 0 && SPECIAL_NAMES.includes(username!.toLowerCase())) {
