@@ -14,7 +14,7 @@ export function AskForName() {
 
     useEffect(() => {
         if (!shownSpecial) {
-            if (SPECIAL_NAMES.length > 0 && SPECIAL_NAMES.includes(username!.toLowerCase())) {
+            if (SPECIAL_NAMES.length > 0 && SPECIAL_NAMES.includes((username || '').toLowerCase())) {
                 setSpecial(true);
             }
         }

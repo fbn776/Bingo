@@ -33,8 +33,6 @@ export function CreateGame() {
 
         const data = await gameEvents.waitFor('create-reply') as { data: { currentTurn: "guest" | "host" } };
 
-        console.log("CREATED:", data);
-
         // Change URL to main game
         navigate('/game');
 
@@ -48,7 +46,8 @@ export function CreateGame() {
             currBoardState: mapUserBoardToBoardState(selectedBoard!),
             currentTurn: data.data.currentTurn,
             noOfBingo: 0,
-            wonBy: null
+            wonBy: null,
+            bingos: []
         })
     }
 

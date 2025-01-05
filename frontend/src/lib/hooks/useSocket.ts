@@ -48,7 +48,8 @@ export default function useSocket(events: typeof gameEvents) {
 
                             return item;
                         }),
-                        noOfBingo: infoMoveData.noOfBingo
+                        noOfBingo: infoMoveData.bingos.length,
+                        bingos: infoMoveData.bingos
                     }))
                     break;
                 }
@@ -64,6 +65,31 @@ export default function useSocket(events: typeof gameEvents) {
                        ...prev,
                        wonBy: wonData.won
                     }))
+                    break;
+                }
+                case "ask-for-replay": {
+                    gameEvents.emit("ask-replay", {
+                        data: {
+                            by: data.by
+                        },
+                        type: "game-event"
+                    });
+                    break;
+                }
+                case "cancelled-replay": {
+                    gameEvents.emit("cancel-replay", {
+                        type: 'game-event',
+                        data: ''
+                    });
+                    toast.info("The other player cancelled the replay request");
+                    break;
+                }
+                case "continue-replay": {
+                    gameEvents.emit('reset-game', {
+                        type: 'game-event',
+                        data: data
+                    });
+
                     break;
                 }
                 default:

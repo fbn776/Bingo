@@ -44,7 +44,7 @@ export default class GameStore {
                 name: data.hostName,
                 ws: data.ws,
                 board: data.board,
-                noOfBingo: 0,
+                bingos: []
             },
             gameTitle: data.gameTitle,
             currentState: DEFAULT_BOARD_STATE,
@@ -74,7 +74,7 @@ export default class GameStore {
                 name: data.guestName,
                 ws: data.ws,
                 board: data.board,
-                noOfBingo: 0,
+                bingos: []
             },
             gameOver: false
         });

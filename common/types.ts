@@ -1,5 +1,7 @@
 export interface IMessage {
-    type: "error" | "ack" | "create" | "join" | "player-joined" | "move" | "info-move" | "say-bingo" | "won-bingo" | "replay-game";
+    type: "error" | "ack" | "create" | "join" | "player-joined" |
+        "move" | "info-move" | "say-bingo" | "won-bingo" | "replay-game" | "ask-for-replay" | "replay-reply" |
+        "cancel-replay" | "cancelled-replay" | "continue-replay";
 }
 
 /** Message representing an error*/
@@ -61,7 +63,7 @@ export interface IPlayerMove extends IMessage {
 export interface IInformPlayersMove extends IMessage {
     type: "info-move",
     selected: number,
-    noOfBingo: number,
+    bingos: number[][],
     currTurn: "host" | "guest",
     /** Might be redundant as the other current turn if the player who played*/
     playedBy: "host" | "guest"
@@ -88,11 +90,34 @@ export type TLocalBoardCell = {
 
 export interface IReplayGame extends IMessage {
     type: "replay-game",
-    gameID: string
+    gameID: string,
+    by: "guest" | "host"
+}
+
+export interface IAskForReplay extends IMessage {
+    type: "ask-for-replay",
+    by: "guest" | "host"
 }
 
 export interface IReplayGameAck extends IMessage {
-    type: "replay-game",
+    type: "replay-reply",
     gameID: string,
+    by: "guest" | "host",
     ack: "yes" | "no"
+}
+
+export interface ICancelReplay extends IMessage {
+    type: "cancel-replay",
+    gameID: string,
+    by: "guest" | "host"
+}
+
+export interface ICancelledReplay extends IMessage {
+    type: "cancelled-replay",
+}
+
+export interface IContinueToReplay extends IMessage {
+    type: "continue-replay",
+    to: "guest" | "host",
+    currTurn: "guest" | "host"
 }

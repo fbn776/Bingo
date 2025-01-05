@@ -44,7 +44,8 @@ export function JoinGame() {
                 host: data.data.host,
                 currBoardState: mapUserBoardToBoardState(selectedBoard!),
                 noOfBingo: 0,
-                wonBy: null
+                wonBy: null,
+                bingos: []
             });
 
             navigate('/game');

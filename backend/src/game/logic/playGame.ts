@@ -2,9 +2,9 @@ import {IInformPlayersMove, IPlayerMove} from "../../../../common/types";
 import WebSocket from "ws";
 import GameStore from "../store";
 import sendMsg from "../../lib/utils";
-import getNoOfBingos from "../../lib/getNoOfBingos";
+import getMatchedBingos from "../../lib/getMatchedBingos";
 
-export default function playGame(data: IPlayerMove, ws: WebSocket) {
+export default function playGame(data: IPlayerMove) {
     let game = GameStore.getGame(data.gameID);
 
     if (!game)
@@ -26,19 +26,19 @@ export default function playGame(data: IPlayerMove, ws: WebSocket) {
 
     game = GameStore.getGame(data.gameID)!;
 
-    const host_noOfBingo = getNoOfBingos(game.host?.board!, game.currentState);
-    const guest_noOfBingo = getNoOfBingos(game.guest?.board!, game.currentState);
+    const host_bingos = getMatchedBingos(game.host?.board!, game.currentState);
+    const guest_bingos = getMatchedBingos(game.guest?.board!, game.currentState);
 
     // Update the game
     GameStore.setGame(data.gameID, {
         ...game,
         host: {
             ...game.host!,
-            noOfBingo: host_noOfBingo
+            bingos: host_bingos
         },
         guest: {
             ...game.guest!,
-            noOfBingo: guest_noOfBingo
+            bingos: guest_bingos,
         }
     })
 
@@ -47,7 +47,7 @@ export default function playGame(data: IPlayerMove, ws: WebSocket) {
         type: 'info-move',
         selected: data.selected,
         currTurn: game.currentTurn!,
-        noOfBingo: host_noOfBingo,
+        bingos: host_bingos,
         playedBy: data.by
     });
 
@@ -56,7 +56,7 @@ export default function playGame(data: IPlayerMove, ws: WebSocket) {
         type: 'info-move',
         selected: data.selected,
         currTurn: game.currentTurn!,
-        noOfBingo: guest_noOfBingo,
+        bingos: guest_bingos,
         playedBy: data.by
     });
 }

@@ -6,6 +6,9 @@ import {createGame} from "./logic/createGame";
 import {joinGame} from "./logic/joinGame";
 import playGame from "./logic/playGame";
 import saidBingo from "./logic/saidBingo";
+import askForReplay from "./logic/askForReplay";
+import cancelReplayRequest from "./logic/cancelReplayRequest";
+import setupForGameReplay from "./logic/setupForGameReplay";
 
 
 export default function initGame(wss: WebSocket.Server) {
@@ -27,11 +30,23 @@ export default function initGame(wss: WebSocket.Server) {
                     break;
                 case 'move':
                     Logger.info('MOVE request');
-                    playGame(data, ws);
+                    playGame(data);
                     break;
                 case "say-bingo":
                     Logger.info(`Player ${data.by} says BINGO`);
                     saidBingo(data);
+                    break;
+                case "replay-game":
+                    Logger.info(`Player ${data.by} asks for a replay`);
+                    askForReplay(data);
+                    break;
+                case "cancel-replay":
+                    Logger.info(`Cancelled the replay`);
+                    cancelReplayRequest(data);
+                    break;
+                case "replay-reply":
+                    Logger.info(`Player wants to replay`);
+                    setupForGameReplay(data);
                     break;
                 default:
                     sendMsg<IErrorMsg>(ws, {

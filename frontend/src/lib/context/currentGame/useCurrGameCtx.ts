@@ -11,6 +11,7 @@ export interface ICurrGame {
     currBoardState: TLocalBoardCell[],
     currentTurn: "guest" | "host" | null,
     noOfBingo: number,
+    bingos: number[][],
     wonBy: "guest" | "host" | null,
 }
 

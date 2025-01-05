@@ -6,7 +6,7 @@ export type TPlayer = {
     name: string,
     /** The player's board format 1 to 25 numbers*/
     board: number[],
-    noOfBingo: number
+    bingos: number[][]
 }
 
 export interface GameInstance {

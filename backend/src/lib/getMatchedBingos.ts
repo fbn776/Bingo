@@ -17,21 +17,21 @@ const winPatternsIndex = [
 ]
 
 /**
- * Returns the no of consecutive cells selected in the board (horizontal, vertical, or, diagonal)
+ * Returns the consecutive cells selected in the board (horizontal, vertical, or, diagonal)
  * @param board The array of numbers, representing the board
  * @param selected The array of objects each with a number from 1 to 25 and if selected or not. (NOTE In this order. It matters because, the check depends on this order)
  */
-export default function getNoOfBingos(board: number[], selected: TLocalBoardCell[]) {
-    let bingoCount = 0;
+export default function getMatchedBingos(board: number[], selected: TLocalBoardCell[]): number[][] {
+    let bingos: number[][] = [];
     for (const pattern of winPatternsIndex) {
         const isWin = pattern.every((index) => {
             return selected[board[index] - 1].selected;
         });
 
         if (isWin) {
-            ++bingoCount;
+            bingos.push(pattern);
         }
     }
 
-    return bingoCount;
+    return bingos;
 }
