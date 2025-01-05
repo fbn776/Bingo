@@ -89,3 +89,8 @@
 .bingo-text .selected {
     color: black;
 }
+
+#tsparticles {
+    position: fixed;
+    inset: 0;
+}
