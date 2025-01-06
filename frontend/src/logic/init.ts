@@ -3,7 +3,9 @@ import {IAckMsg, TAckFor} from "../../../common/types.ts";
 
 type TGameData = {
     type: "ack" | "error" | "game-event" | string,
-    data: unknown
+    data: unknown,
+    subtype?: string,
+    msg?: string
 }
 
 
