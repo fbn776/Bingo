@@ -21,7 +21,6 @@ import {IconReload} from "@tabler/icons-react";
 import Confetti from 'react-confetti'
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
-import GameChat from "@/components/GameChat.tsx";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -58,7 +57,6 @@ export function MainGame() {
     const [showReplayWindow, setShowReplayWindow] = useState(false);
     const [isWaiting, setIsWaiting] = useState(false);
     const {ws} = useSocketCtx();
-    const [showGameChat, setShowGameChat] = useState(true);
 
     useEffect(() => {
         if (!host) {
@@ -271,12 +269,12 @@ export function MainGame() {
             </div>
 
             <div className="text-right w-full pb-3 pr-3">
-                <button className="rounded-full bg-white p-4 shadow-xl" onClick={() => setShowGameChat(true)}>
+                <button className="rounded-full bg-white p-4 shadow-xl">
                     <ChatIcon/>
                 </button>
-                {showGameChat &&
-                    <GameChat/>
-                }
+                {/*{showGameChat &&*/}
+                {/*    <GameChat/>*/}
+                {/*}*/}
             </div>
         </div>
 

@@ -95,16 +95,25 @@
     inset: 0;
 }
 
+.message-cont {
+    @apply flex;
+}
+
+.message-cont[data-msg-by='you'] {
+    @apply justify-end;
+}
+
 .messages {
     @apply bg-white rounded-md shadow p-2 max-w-[60%] text-left;
 }
 
-.messages .name {
 
+.message-cont[data-msg-by='you'] .name {
+    @apply text-right text-violet-950;
 }
 
 .messages .name {
-    @apply text-[10px] bg-blue-300 rounded p-1 w-fit;
+    @apply text-[10px] rounded w-full text-green-800;
 }
 
 .messages .message {
@@ -113,4 +122,8 @@
 
 .messages .time {
     @apply text-[10px] opacity-60 w-full border-t pt-1
+}
+
+.message-cont[data-msg-by='you'] .time {
+    @apply text-right;
 }
