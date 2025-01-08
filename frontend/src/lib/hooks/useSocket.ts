@@ -92,6 +92,13 @@ export default function useSocket(events: typeof gameEvents) {
 
                     break;
                 }
+                case "reaction": {
+                    gameEvents.emit('reaction', {
+                        type: 'game-event',
+                        data: data
+                    });
+                    break;
+                }
                 default:
                     console.error("Undefined type");
                     toast.error(data.message || "Invalid data");

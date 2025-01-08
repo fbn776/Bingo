@@ -1,7 +1,7 @@
 export interface IMessage {
     type: "error" | "ack" | "create" | "join" | "player-joined" |
         "move" | "info-move" | "say-bingo" | "won-bingo" | "replay-game" | "ask-for-replay" | "replay-reply" |
-        "cancel-replay" | "cancelled-replay" | "continue-replay";
+        "cancel-replay" | "cancelled-replay" | "continue-replay" | "reaction";
 }
 
 /** Message representing an error*/
@@ -120,4 +120,11 @@ export interface IContinueToReplay extends IMessage {
     type: "continue-replay",
     to: "guest" | "host",
     currTurn: "guest" | "host"
+}
+
+export interface IReaction {
+    type: "reaction",
+    emoji: string[],
+    gameID: string,
+    by: "guest" | "host",
 }

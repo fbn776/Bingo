@@ -9,6 +9,7 @@ import saidBingo from "./logic/saidBingo";
 import askForReplay from "./logic/askForReplay";
 import cancelReplayRequest from "./logic/cancelReplayRequest";
 import setupForGameReplay from "./logic/setupForGameReplay";
+import sendReaction from "./logic/sendReaction";
 
 
 export default function initGame(wss: WebSocket.Server) {
@@ -47,6 +48,10 @@ export default function initGame(wss: WebSocket.Server) {
                 case "replay-reply":
                     Logger.info(`Player wants to replay`);
                     setupForGameReplay(data);
+                    break;
+                case "reaction":
+                    Logger.info(`Player ${data.by} reacted with ${data.emoji}`);
+                    sendReaction(data);
                     break;
                 default:
                     sendMsg<IErrorMsg>(ws, {
