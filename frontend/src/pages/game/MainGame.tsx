@@ -11,7 +11,7 @@ import sendMsg, {mapUserBoardToBoardState} from "@/lib/utils.ts";
 import {
     ICancelReplay,
     IContinueToReplay,
-    IPlayerMove,
+    IPlayerMove, IReaction,
     IReplayGame,
     IReplayGameAck,
     ISayBingo
@@ -21,6 +21,8 @@ import {IconReload} from "@tabler/icons-react";
 import Confetti from 'react-confetti'
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
+import ReactionPanel from "@/components/ReactionPanel.tsx";
+import fireReaction from "@/lib/fireReaction.ts";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -96,10 +98,18 @@ export function MainGame() {
             setShowReplayWindow(false);
         });
 
+        const ID4 = gameEvents.on('reaction', (e) => {
+            const data = e.detail.data as IReaction;
+            console.log("REACTION DATA", data);
+
+            fireReaction("right", data.emoji, 1, 500);
+        })
+
         return () => {
             gameEvents.remove(ID1);
             gameEvents.remove(ID2);
             gameEvents.remove(ID3);
+            gameEvents.remove(ID4);
         }
     }, []);
 
@@ -268,13 +278,11 @@ export function MainGame() {
                 }
             </div>
 
-            <div className="text-right w-full pb-3 pr-3">
-                <button className="rounded-full bg-white p-4 shadow-xl">
+            <div className="w-full text-right pb-3 pr-3 flex flex-col gap-2 items-end">
+                <ReactionPanel/>
+                <button className="rounded-full bg-white p-4 shadow-xl w-fit">
                     <ChatIcon/>
                 </button>
-                {/*{showGameChat &&*/}
-                {/*    <GameChat/>*/}
-                {/*}*/}
             </div>
         </div>
 

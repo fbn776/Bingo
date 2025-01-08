@@ -27,9 +27,6 @@ export function JoinGame() {
 
         const data = await gameEvents.waitFor('join-reply');
 
-        console.log("ack data:", data);
-
-
         if (data.subtype === "error") {
             toast.error(data.msg);
         } else {

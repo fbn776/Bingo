@@ -127,3 +127,23 @@
 .message-cont[data-msg-by='you'] .time {
     @apply text-right;
 }
+
+.reaction-cont .panel {
+    transition: 0.2s transform ease-out , 0.1s opacity ease-out;
+    transform: translateX(0%) scale(0);
+    transform-origin: right;
+    opacity: 0;
+}
+
+.reaction-cont.active .panel {
+    transform: translateX(0px) scale(1);
+    opacity: 1;
+}
+
+.reaction-cont .open-btn {
+    transition: 0.2s background, 0.2s color;
+}
+.reaction-cont.active .open-btn {
+    @apply bg-blue-500 text-white;
+
+}
