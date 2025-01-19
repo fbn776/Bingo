@@ -32,7 +32,7 @@ export default function ReactionPanel() {
                 </button>
             })}
         </div>
-        <button className="open-btn rounded-full bg-white p-4 shadow-xl w-fit relative z-10"
+        <button className="open-btn rounded-full bg-white p-4 shadow-xl w-fit relative z-10 hover:bg-blue-500 hover:text-white"
                 onClick={() => setVisible(p => !p)}>
             <IconMoodHappy/>
         </button>
