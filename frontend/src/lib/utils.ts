@@ -136,3 +136,8 @@ export function checkIfSpecial() {
         import.meta.env.VITE_SPECIAL_MSG3
     );
 }
+
+
+export function getRandomNumber(min: number, max: number): number {
+    return Math.random() * (max - min) + min;
+}

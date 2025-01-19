@@ -4,12 +4,6 @@ import {User} from "lucide-react";
 
 export default function Home() {
     const {setShowBoardsWindow, setShowNameWindow} = useAppCtx();
-    //
-    // useEffect(() => {
-    //     window.onkeydown = () => {
-    //         fireReaction('right', ['😂', '😆', '🤣'], 4, 500);
-    //     }
-    // }, []);
 
     return (
         <>

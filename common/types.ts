@@ -124,7 +124,7 @@ export interface IContinueToReplay extends IMessage {
 
 export interface IReaction {
     type: "reaction",
-    emoji: string[],
+    emoji: string,
     gameID: string,
     by: "guest" | "host",
 }
