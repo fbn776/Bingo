@@ -1,5 +1,5 @@
-import {IconSend2, IconX} from "@tabler/icons-react";
 import {useState} from "react";
+import {Send, X} from "lucide-react";
 
 function Message({name, message, time, msgBy}: {
     name: string,
@@ -44,12 +44,12 @@ export default function GameChat() {
             <button
                 type="button"
                 className="rounded-md p-1 bg-red-500 text-white shadow aspect-square h-full flex justify-center items-center">
-                <IconX/>
+                <X/>
             </button>
             <input type="text" className="inline-block flex-1 rounded-md px-3 py-2" placeholder="Enter message..." name="message"/>
             <button
                 className="rounded-md p-1 shadow aspect-square h-full flex justify-center items-center bg-green-500 text-green-900">
-                <IconSend2/>
+                <Send />
             </button>
         </form>
     </main>

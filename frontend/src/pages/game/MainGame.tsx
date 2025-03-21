@@ -1,6 +1,5 @@
 import FilledUserIcon from "@/components/icons/FilledUserIcon.tsx";
 import UserIcon from "@/components/icons/UserIcon.tsx";
-import ChatIcon from "@/components/icons/ChatIcon.tsx";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import Spinner from "@/components/ui/spinner.tsx";
 import {Link, useNavigate} from "react-router";
@@ -16,13 +15,13 @@ import {
     IReplayGameAck,
     ISayBingo
 } from "../../../../common/types.ts";
-import {ArrowLeft} from "lucide-react";
-import {IconReload} from "@tabler/icons-react";
+import {ArrowLeft, RotateCcw} from "lucide-react";
 import Confetti from 'react-confetti'
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 import ReactionPanel from "@/components/ReactionPanel.tsx";
 import fireReaction from "@/lib/fireReaction.ts";
+import ChatPanel from "@/components/ChatPanel.tsx";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -141,7 +140,7 @@ export function MainGame() {
                             })
                         }}
                 >
-                    <IconReload/>
+                    <RotateCcw />
                     Replay
                 </button>
 
@@ -279,9 +278,7 @@ export function MainGame() {
 
             <div className="w-full text-right pb-3 pr-3 flex flex-col gap-2 items-end">
                 <ReactionPanel/>
-                <button className="rounded-full bg-white p-4 shadow-xl w-fit">
-                    <ChatIcon/>
-                </button>
+                <ChatPanel/>
             </div>
         </div>
 

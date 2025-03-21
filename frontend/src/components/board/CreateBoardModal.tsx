@@ -6,7 +6,7 @@ import {checkForDuplicatesAndWhere, cn, generateRandomID, shuffleArray} from "@/
 import RandomDiceIcon from "@/components/icons/RandomIcon.tsx";
 import EraseIcon from "@/components/icons/EraseIcon.tsx";
 import {TBoard, useAppCtx} from "@/lib/context/app/useAppCtx.ts";
-import {IconPencil} from "@tabler/icons-react";
+import {Pencil} from "lucide-react";
 
 const SourceArr = Array.from({length: 25}, (_, i) => i + 1);
 
@@ -200,7 +200,7 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                     }
                     setEditMode(prev => !prev);
                 }}>
-                    <IconPencil size="18" className={editMode ? "text-blue-500" : ""}/>
+                    <Pencil size="18" className={editMode ? "text-blue-500" : ""}/>
                 </button>
             </div>
             <div className="w-full mt-3 flex gap-4 flex-col">
