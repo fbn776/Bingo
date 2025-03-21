@@ -1,25 +1,21 @@
-import {useEffect, useState} from "react";
-import {WEBSOCKET_URL} from "@/lib/data.ts";
-import {gameEvents} from "@/logic/init.ts";
-import {IInformPlayersMove, IMessage, IWonBingo} from "../../../../common/types.ts";
+import { useEffect, useState } from "react";
+import { WEBSOCKET_URL } from "@/lib/data.ts";
+import { gameEvents } from "@/logic/init.ts";
+import { IInformPlayersMove, IMessage, IWonBingo } from "../../../../common/types.ts";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
-import {toast} from "sonner";
-
+import { toast } from "sonner";
+import WebSocketSingleton from "@/lib/websocket.ts";
 
 export default function useSocket(events: typeof gameEvents) {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState<'disconnected' | 'connected' | 'error'>('disconnected');
-    const [ws, setWs] = useState<WebSocket | null>(null);
-    const {youAre, setCurrCtx} = useCurrGameCtx();
+    const { setCurrCtx } = useCurrGameCtx();
 
     useEffect(() => {
-        const ws = new WebSocket(WEBSOCKET_URL);
-        setWs(ws);
+        const wsSingleton = WebSocketSingleton.getInstance(WEBSOCKET_URL);
+        const ws = wsSingleton.getSocket();
 
-        ws.onopen = () => {
-            setSocketConnectionStatus('connected');
-        }
-
-        ws.onmessage = (e) => {
+        const handleOpen = () => setSocketConnectionStatus('connected');
+        const handleMessage = (e: MessageEvent) => {
             const data = JSON.parse(e.data);
 
             switch (data.type as IMessage["type"]) {
@@ -28,104 +24,76 @@ export default function useSocket(events: typeof gameEvents) {
                     break;
                 case 'player-joined':
                     toast.success(`${data.guestName} joined`);
-                    setCurrCtx(prevState => {
-                        return {...prevState, guest: data.guestName}
-                    })
+                    setCurrCtx(prevState => ({ ...prevState, guest: data.guestName }));
                     break;
                 case "info-move": {
                     const infoMoveData = data as IInformPlayersMove;
-
                     setCurrCtx(prev => ({
                         ...prev,
                         currentTurn: infoMoveData.currTurn,
-                        currBoardState: prev.currBoardState.map((item) => {
-                            if (item.num === infoMoveData.selected) {
-                                return {
-                                    num: item.num,
-                                    selected: true,
-                                }
-                            }
-
-                            return item;
-                        }),
+                        currBoardState: prev.currBoardState.map((item) =>
+                            item.num === infoMoveData.selected ? { num: item.num, selected: true } : item
+                        ),
                         noOfBingo: infoMoveData.bingos.length,
                         bingos: infoMoveData.bingos
-                    }))
+                    }));
                     break;
                 }
                 case "won-bingo": {
                     const wonData = data as IWonBingo;
-                    console.log("WON DATA", wonData, "YOU ARE:", youAre);
                     if (wonData.won === data.to) {
                         toast.success("You won");
                     } else {
                         toast.error("You lost");
                     }
-                    setCurrCtx(prev => ({
-                       ...prev,
-                       wonBy: wonData.won
-                    }))
+                    setCurrCtx(prev => ({ ...prev, wonBy: wonData.won }));
                     break;
                 }
-                case "ask-for-replay": {
-                    gameEvents.emit("ask-replay", {
-                        data: {
-                            by: data.by
-                        },
-                        type: "game-event"
-                    });
+                case "ask-for-replay":
+                    gameEvents.emit("ask-replay", { data: { by: data.by }, type: "game-event" });
                     break;
-                }
-                case "cancelled-replay": {
-                    gameEvents.emit("cancel-replay", {
-                        type: 'game-event',
-                        data: ''
-                    });
+                case "cancelled-replay":
+                    gameEvents.emit("cancel-replay", { type: 'game-event', data: '' });
                     toast.info("The other player cancelled the replay request");
                     break;
-                }
-                case "continue-replay": {
-                    gameEvents.emit('reset-game', {
-                        type: 'game-event',
-                        data: data
-                    });
-
+                case "continue-replay":
+                    gameEvents.emit('reset-game', { type: 'game-event', data });
                     break;
-                }
-                case "reaction": {
-                    gameEvents.emit('reaction', {
-                        type: 'game-event',
-                        data: data
-                    });
+                case "reaction":
+                    gameEvents.emit('reaction', { type: 'game-event', data });
                     break;
-                }
                 default:
                     console.error("Undefined type");
                     toast.error(data.message || "Invalid data");
                     break;
             }
-
-
         };
 
-        ws.onclose = () => {
-            console.log("disconnected from websocket");
+        const handleClose = () => {
+            console.log("Disconnected from WebSocket");
             setSocketConnectionStatus('disconnected');
-        }
+        };
 
-        ws.onerror = (e) => {
+        const handleError = (e: Event) => {
             setSocketConnectionStatus('error');
-            console.log(e);
-        }
+            console.error("WebSocket error:", e);
+        };
+
+        ws.addEventListener("open", handleOpen);
+        ws.addEventListener("message", handleMessage);
+        ws.addEventListener("close", handleClose);
+        ws.addEventListener("error", handleError);
 
         return () => {
-            ws.close();
+            ws.removeEventListener("open", handleOpen);
+            ws.removeEventListener("message", handleMessage);
+            ws.removeEventListener("close", handleClose);
+            ws.removeEventListener("error", handleError);
         };
     }, []);
 
-
     return {
-        ws, setWs,
-        socketConnectionStatus, setSocketConnectionStatus,
-    }
+        ws: WebSocketSingleton.getInstance(WEBSOCKET_URL).getSocket(),
+        socketConnectionStatus,
+    };
 }
