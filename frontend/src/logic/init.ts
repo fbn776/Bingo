@@ -9,4 +9,4 @@ type TGameData = {
 }
 
 
-export const gameEvents = new EventEmitter<TGameData | IAckMsg, TAckFor | "test" | "ask-replay" | "cancel-replay" | "reset-game" | "reaction">();
+export const gameEvents = new EventEmitter<TGameData | IAckMsg, TAckFor | "test" | "ask-replay" | "cancel-replay" | "reset-game" | "reaction" | "chat">();

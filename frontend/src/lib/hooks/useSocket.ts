@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { WEBSOCKET_URL } from "@/lib/data.ts";
-import { gameEvents } from "@/logic/init.ts";
-import { IInformPlayersMove, IMessage, IWonBingo } from "../../../../common/types.ts";
+import {useEffect, useState} from "react";
+import {WEBSOCKET_URL} from "@/lib/data.ts";
+import {gameEvents} from "@/logic/init.ts";
+import {IInformPlayersMove, IMessage, IWonBingo} from "../../../../common/types.ts";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
-import { toast } from "sonner";
+import {toast} from "sonner";
 import WebSocketSingleton from "@/lib/websocket.ts";
 
 export default function useSocket(events: typeof gameEvents) {
     const [socketConnectionStatus, setSocketConnectionStatus] = useState<'disconnected' | 'connected' | 'error'>('disconnected');
-    const { setCurrCtx } = useCurrGameCtx();
+    const {setCurrCtx} = useCurrGameCtx();
 
     useEffect(() => {
         const wsSingleton = WebSocketSingleton.getInstance(WEBSOCKET_URL);
@@ -24,7 +24,7 @@ export default function useSocket(events: typeof gameEvents) {
                     break;
                 case 'player-joined':
                     toast.success(`${data.guestName} joined`);
-                    setCurrCtx(prevState => ({ ...prevState, guest: data.guestName }));
+                    setCurrCtx(prevState => ({...prevState, guest: data.guestName}));
                     break;
                 case "info-move": {
                     const infoMoveData = data as IInformPlayersMove;
@@ -32,7 +32,7 @@ export default function useSocket(events: typeof gameEvents) {
                         ...prev,
                         currentTurn: infoMoveData.currTurn,
                         currBoardState: prev.currBoardState.map((item) =>
-                            item.num === infoMoveData.selected ? { num: item.num, selected: true } : item
+                            item.num === infoMoveData.selected ? {num: item.num, selected: true} : item
                         ),
                         noOfBingo: infoMoveData.bingos.length,
                         bingos: infoMoveData.bingos
@@ -46,21 +46,24 @@ export default function useSocket(events: typeof gameEvents) {
                     } else {
                         toast.error("You lost");
                     }
-                    setCurrCtx(prev => ({ ...prev, wonBy: wonData.won }));
+                    setCurrCtx(prev => ({...prev, wonBy: wonData.won}));
                     break;
                 }
                 case "ask-for-replay":
-                    gameEvents.emit("ask-replay", { data: { by: data.by }, type: "game-event" });
+                    gameEvents.emit("ask-replay", {data: {by: data.by}, type: "game-event"});
                     break;
                 case "cancelled-replay":
-                    gameEvents.emit("cancel-replay", { type: 'game-event', data: '' });
+                    gameEvents.emit("cancel-replay", {type: 'game-event', data: ''});
                     toast.info("The other player cancelled the replay request");
                     break;
                 case "continue-replay":
-                    gameEvents.emit('reset-game', { type: 'game-event', data });
+                    gameEvents.emit('reset-game', {type: 'game-event', data});
                     break;
                 case "reaction":
-                    gameEvents.emit('reaction', { type: 'game-event', data });
+                    gameEvents.emit('reaction', {type: 'game-event', data});
+                    break;
+                case "chat":
+                    gameEvents.emit('chat', {type: 'game-event', data});
                     break;
                 default:
                     console.error("Undefined type");

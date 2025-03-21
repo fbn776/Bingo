@@ -64,7 +64,7 @@ export function MainGame() {
             navigate('/');
             return;
         }
-    }, []);
+    }, [host, navigate]);
 
     useEffect(() => {
         setDialogOpen(false);
@@ -99,7 +99,7 @@ export function MainGame() {
 
         const ID4 = gameEvents.on('reaction', (e) => {
             const data = e.detail.data as IReaction;
-            console.log("EMOJI_DATA:", data)
+            console.log("EMOJI_DATA:", data);
             fireReaction("right", data.emoji, 1, 500);
         })
 
@@ -109,7 +109,7 @@ export function MainGame() {
             gameEvents.remove(ID3);
             gameEvents.remove(ID4);
         }
-    }, []);
+    }, [selectedBoard, setCurrCtx]);
 
     return <>
         {!guest &&
@@ -217,7 +217,7 @@ export function MainGame() {
                         <Spinner className="mr-2"/>
                         Waiting for
                         <span className="bg-gray-300 rounded-md mx-1 px-1">
-                            {(currentTurn === "guest" ? guest : host).trim().substring(0, 10)}
+                            {(currentTurn === "guest" ? guest : host.split(' ')[0]).trim().substring(0, 10)}
                         </span>
                         to play
                     </div>

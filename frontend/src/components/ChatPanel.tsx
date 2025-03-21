@@ -1,20 +1,149 @@
 import ChatIcon from "@/components/icons/ChatIcon.tsx";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import {Send} from "lucide-react";
+import sendMsg, {cn} from "@/lib/utils.ts";
+import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
+import {gameEvents} from "@/logic/init.ts";
+import {IChatMsg} from "../../../common/types.ts";
+import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
+
+interface ChatMsg {
+    message: string;
+    sender: "you" | "other";
+}
 
 export default function ChatPanel() {
+    const bottomScrollRef = useRef<HTMLDivElement>(null);
+    const {ws} = useSocketCtx();
+    const {youAre, gameID, guest, host} = useCurrGameCtx();
     const [showChat, setShowChat] = useState(false);
+    const [messages, setMessages] = useState<ChatMsg[]>([]);
+    const [unreadMsg, setUnreadMsg] = useState<ChatMsg[]>([]);
+    const btnRef = useRef<HTMLButtonElement>(null);
+
+
+    useEffect(() => {
+        if(showChat) {
+            setUnreadMsg([]);
+        }
+
+        const id = gameEvents.on("chat", (e) => {
+            const data = e.detail.data as IChatMsg;
+
+            setMessages(p => [...p, {
+                message: data.message,
+                sender: data.by === youAre ? "you" : "other"
+            }]);
+
+            if (!showChat) {
+                setUnreadMsg(p => [...p, {
+                    message: data.message,
+                    sender: data.by === youAre ? "you" : "other"
+                }]);
+
+                if (btnRef.current) {
+                    console.log("shake");
+                    btnRef.current.classList.add("shake");
+                }
+            }
+        });
+
+        const shakeEnd = () => {
+            btnRef.current?.classList.remove("shake");
+        }
+
+        const refCopy = btnRef?.current;
+        btnRef.current?.addEventListener("animationend", shakeEnd);
+
+        return () => {
+            refCopy?.removeEventListener("animationend", shakeEnd);
+            gameEvents.remove(id);
+        }
+    }, [showChat, youAre]);
+
+    useEffect(() => {
+        if (bottomScrollRef.current) {
+            bottomScrollRef.current.scrollIntoView({behavior: "smooth"});
+        }
+    }, [messages]);
 
     return (
-        <>
-            <div>
+        <div className="relative">
+            <div
+                className={cn(
+                    "transition-all origin-right opacity-0 scale-y-0 scale absolute h-full right-[calc(100%+10px)] w-[300px] scrollbar-hidden z-50",
+                    showChat ? "scale-y-100 opacity-100" : ""
+                )}
+            >
+
+                <div
+                    className={cn(
+                        "space-y-2 overflow-y-auto absolute bottom-16 w-full shadow bg-gray-50/80 border border-gray-800/40 p-4 rounded-2xl text-white min-h-[150px] max-h-[500px] scrollbar-hidden",
+                        messages.length === 0 ? "flex items-center justify-center" : ""
+                    )}
+                >
+                    {messages.length === 0 ? <p className="w-full text-center text-black/60">No messages found!</p> :
+                        <>
+                            {messages.map((msg) => {
+                                return <div
+                                    className={cn("flex items-center gap-2", msg.sender === "you" ? "justify-end" : "justify-start")}>
+                                    <div
+                                        className={cn("p-2 bg-custom-primary/80 rounded-lg max-w-[80%] flex-1", msg.sender === "you" ? "text-right bg-custom-secondary/80 text-black" : "text-left")}>
+                                <span className="text-xs">
+                                    {msg.sender === "you" ? "You" : youAre === "host" ? guest : host}
+                                </span>
+                                        <p>{msg.message}</p>
+                                    </div>
+                                </div>
+                            })}
+                            <div className="sr-only" ref={bottomScrollRef}/>
+                        </>
+
+                    }
+                </div>
+
+                <form className="shadow w-full flex bg-white rounded-full overflow-hidden relative items-center"
+                      onSubmit={(e) => {
+                          e.preventDefault();
+                          const formData = new FormData(e.target as HTMLFormElement);
+                          const message = formData.get("message") as string;
+
+                          if (message.trim() === "") return;
+                          setMessages(p => [...p, {message, sender: "you"}]);
+
+                          sendMsg<IChatMsg>(ws!, {
+                              gameID: gameID,
+                              message: message,
+                              type: "chat",
+                              by: youAre!
+                          });
+
+                          (e.target as HTMLFormElement).reset();
+                      }}>
+                    <input className="flex-1 pl-6 pr-3 py-4 rounded-full w-[calc(100%-40px)]"
+                           placeholder="Enter message" name="message"/>
+                    <button className="w-[40px] flex hover:text-blue-500">
+                        <Send/>
+                    </button>
+                </form>
 
             </div>
-            <button className="rounded-full bg-white p-4 shadow-xl w-fit hover:bg-blue-500 hover:text-white"
-                    onClick={() => {
-                        setShowChat(true)
-                    }}>
+            <button
+                ref={btnRef}
+                className={cn(
+                    "relative rounded-full bg-white p-4 shadow-xl w-fit hover:bg-blue-500 hover:text-white",
+                    showChat && "bg-blue-500 text-white",
+                )}
+                onClick={() => {
+                    setShowChat(p => !p)
+                }}
+            >
                 <ChatIcon/>
+
+                {!showChat && unreadMsg.length !== 0 && <div className="bg-red-500 absolute -top-1 -right-1 rounded-full text-white px-1">
+                    {unreadMsg.length > 4 ? "4+" : unreadMsg.length}
+                </div>}
             </button>
-        </>
+        </div>
     )
 }

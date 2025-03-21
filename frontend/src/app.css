@@ -145,5 +145,20 @@
 }
 .reaction-cont.active .open-btn {
     @apply bg-blue-500 text-white;
+}
 
+@keyframes anim-shake-pulse {
+    0% { transform: translateX(0); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5); }
+    10% { transform: translateX(-3px); }
+    20% { transform: translateX(3px); }
+    30% { transform: translateX(-3px); }
+    40% { transform: translateX(3px); }
+    50% { transform: translateX(0); box-shadow: 0 0 8px 4px rgba(255, 0, 0, 0.5); }
+    60% { box-shadow: 0 0 12px 6px rgba(255, 0, 0, 0.4); }
+    70% { box-shadow: 0 0 8px 4px rgba(255, 0, 0, 0.5); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5); }
+}
+
+.shake {
+    animation: anim-shake-pulse 0.5s;
 }
