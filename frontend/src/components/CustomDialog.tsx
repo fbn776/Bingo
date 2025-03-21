@@ -35,7 +35,7 @@ export function CustomDialog({
         <Dialog modal open={open} onOpenChange={(e) => {
             setOpen(e);
         }}>
-            <DialogContent className={cn("rounded-md overflow-y-auto overflow-x-hidden max-sm:max-w-[90%] max-h-[90%]", contentClassName)} aria-describedby={describedby || ''}>
+            <DialogContent className={cn("z-[5000] rounded-md overflow-y-auto overflow-x-hidden max-sm:max-w-[90%] max-h-[90%]", contentClassName)} aria-describedby={describedby || ''}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && <DialogDescription>

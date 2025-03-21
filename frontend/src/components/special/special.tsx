@@ -39,6 +39,7 @@ function shoot(onEnd: () => void) {
             },
             scalar: 2.5,
             disableForReducedMotion: true,
+            zIndex: 5000
         });
 
         confetti({
@@ -53,7 +54,8 @@ function shoot(onEnd: () => void) {
                 },
             },
             scalar: 2.5,
-            disableForReducedMotion: true
+            disableForReducedMotion: true,
+            zIndex: 5000
         });
 
         if (Date.now() < end) {
@@ -73,9 +75,9 @@ export default function Special({setSpecial}: { setSpecial: StateSetter<boolean>
 
     return (
         <>
-            <div className="fixed z-50 inset-0 backdrop-blur-lg flex items-center justify-center">
+            <div className="fixed z-[1001] inset-0 backdrop-blur-lg flex items-center justify-center">
                 {confirmed &&
-                    <main className="w-[50%] bg-white rounded-md shadow p-6 relative max-sm:w-[85%] max-sm:p-4">
+                    <main className="w-[50%] bg-white rounded-md shadow p-6 z-[1002] relative max-sm:w-[85%] max-sm:p-4">
                         <span className="absolute top-[-20px] left-[-20px] -rotate-45 text-4xl">
                             🎀
                         </span>
