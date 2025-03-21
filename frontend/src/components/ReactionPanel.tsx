@@ -1,4 +1,3 @@
-import {IconMoodHappy} from "@tabler/icons-react";
 import {useState} from "react";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
@@ -6,6 +5,7 @@ import sendMsg from "@/lib/utils.ts";
 import {IReaction} from "../../../common/types.ts";
 import {REACTION_EMOJI} from "@/lib/data.ts";
 import fireReaction from "@/lib/fireReaction.ts";
+import {Smile} from "lucide-react";
 
 const EMOJI_KEYS = Object.keys(REACTION_EMOJI);
 
@@ -34,7 +34,7 @@ export default function ReactionPanel() {
         </div>
         <button className="open-btn rounded-full bg-white p-4 shadow-xl w-fit relative z-10 hover:bg-blue-500 hover:text-white"
                 onClick={() => setVisible(p => !p)}>
-            <IconMoodHappy/>
+            <Smile />
         </button>
     </div>
 }

@@ -1,6 +1,5 @@
 import FilledUserIcon from "@/components/icons/FilledUserIcon.tsx";
 import UserIcon from "@/components/icons/UserIcon.tsx";
-import ChatIcon from "@/components/icons/ChatIcon.tsx";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import Spinner from "@/components/ui/spinner.tsx";
 import {Link, useNavigate} from "react-router";
@@ -16,13 +15,13 @@ import {
     IReplayGameAck,
     ISayBingo
 } from "../../../../common/types.ts";
-import {ArrowLeft} from "lucide-react";
-import {IconReload} from "@tabler/icons-react";
+import {ArrowLeft, RotateCcw} from "lucide-react";
 import Confetti from 'react-confetti'
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 import ReactionPanel from "@/components/ReactionPanel.tsx";
 import fireReaction from "@/lib/fireReaction.ts";
+import ChatPanel from "@/components/ChatPanel.tsx";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -65,7 +64,7 @@ export function MainGame() {
             navigate('/');
             return;
         }
-    }, []);
+    }, [host, navigate]);
 
     useEffect(() => {
         setDialogOpen(false);
@@ -100,7 +99,7 @@ export function MainGame() {
 
         const ID4 = gameEvents.on('reaction', (e) => {
             const data = e.detail.data as IReaction;
-            console.log("EMOJI_DATA:", data)
+            console.log("EMOJI_DATA:", data);
             fireReaction("right", data.emoji, 1, 500);
         })
 
@@ -110,7 +109,7 @@ export function MainGame() {
             gameEvents.remove(ID3);
             gameEvents.remove(ID4);
         }
-    }, []);
+    }, [selectedBoard, setCurrCtx]);
 
     return <>
         {!guest &&
@@ -141,7 +140,7 @@ export function MainGame() {
                             })
                         }}
                 >
-                    <IconReload/>
+                    <RotateCcw />
                     Replay
                 </button>
 
@@ -218,7 +217,7 @@ export function MainGame() {
                         <Spinner className="mr-2"/>
                         Waiting for
                         <span className="bg-gray-300 rounded-md mx-1 px-1">
-                            {(currentTurn === "guest" ? guest : host).trim().substring(0, 10)}
+                            {(currentTurn === "guest" ? guest : host.split(' ')[0]).trim().substring(0, 10)}
                         </span>
                         to play
                     </div>
@@ -279,9 +278,7 @@ export function MainGame() {
 
             <div className="w-full text-right pb-3 pr-3 flex flex-col gap-2 items-end">
                 <ReactionPanel/>
-                <button className="rounded-full bg-white p-4 shadow-xl w-fit">
-                    <ChatIcon/>
-                </button>
+                <ChatPanel/>
             </div>
         </div>
 

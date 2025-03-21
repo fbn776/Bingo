@@ -17,7 +17,11 @@ export function JoinGame() {
     const navigate = useNavigate();
 
     async function onJoin(gameID: string) {
-        console.log("Sending msg")
+        if (!selectedBoard) {
+            toast.error("Please select a board first");
+            return;
+        }
+
         sendMsg<IJoinMsg>(ws!, {
             type: "join",
             gameID: gameID,

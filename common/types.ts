@@ -1,7 +1,7 @@
 export interface IMessage {
     type: "error" | "ack" | "create" | "join" | "player-joined" |
         "move" | "info-move" | "say-bingo" | "won-bingo" | "replay-game" | "ask-for-replay" | "replay-reply" |
-        "cancel-replay" | "cancelled-replay" | "continue-replay" | "reaction";
+        "cancel-replay" | "cancelled-replay" | "continue-replay" | "reaction" | "chat";
 }
 
 /** Message representing an error*/
@@ -126,5 +126,12 @@ export interface IReaction {
     type: "reaction",
     emoji: string,
     gameID: string,
+    by: "guest" | "host",
+}
+
+export interface IChatMsg {
+    type: "chat",
+    gameID: string,
+    message: string,
     by: "guest" | "host",
 }

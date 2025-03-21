@@ -1,11 +1,11 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {timeAgo} from "@/lib/utils.ts";
 import EditIcon from "@/components/icons/EditIcon.tsx";
 import PlusIcon from "@/components/icons/PlusIcon.tsx";
 import {CreateBoardModal} from "@/components/board/CreateBoardModal.tsx";
-import {IconHeart, IconHeartFilled, IconTrash, IconX} from "@tabler/icons-react";
 import {TBoard, useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 import {toast} from "sonner";
+import {Heart, Trash2, X} from "lucide-react";
 
 
 export default function BoardsWindow() {
@@ -13,8 +13,16 @@ export default function BoardsWindow() {
     const {boards, setBoards, selectedBoard, setSelectedBoard, showBoardsWindow, setShowBoardsWindow} = useAppCtx();
     const [editData, setEditData] = useState<TBoard | null>(null);
 
-    return showBoardsWindow && <>
-        <main className="fixed inset-0 flex size-full items-center justify-center">
+    console.log("BoardsWindow", {boards, selectedBoard, showBoardsWindow});
+
+    useEffect(() => {
+        if (!selectedBoard) {
+            toast.info("Select or create a board to start playing");
+        }
+    }, [selectedBoard]);
+
+    return (!selectedBoard || showBoardsWindow) && <>
+        <main className="fixed inset-0 flex size-full items-center justify-center z-[999]">
             <div className="fixed inset-0 bg-black bg-opacity-60 -z-20" onClick={() => {
                 setShowBoardsWindow(false);
             }}></div>
@@ -22,9 +30,13 @@ export default function BoardsWindow() {
                 <h1 className="text-2xl mb-2">
                     Customize your board pattern
                     <button className="float-end hover:text-red-500 hover:scale-110" onClick={() => {
+                        if (!selectedBoard) {
+                            toast.error("Create or select a board to continue");
+                            return;
+                        }
                         setShowBoardsWindow(false);
                     }}>
-                        <IconX/>
+                        <X/>
                     </button>
                 </h1>
                 <hr/>
@@ -48,7 +60,7 @@ export default function BoardsWindow() {
                                             }
                                         }}
                                                 className={`hover:text-red-500 ${isSelected ? 'text-red-500' : 'text-black'}`}>
-                                            {isSelected ? <IconHeartFilled/> : <IconHeart/>}
+                                            {isSelected ? <Heart className="fill-red-500" /> : <Heart />}
                                         </button>
 
                                         <button className="hover:text-blue-500" onClick={() => {
@@ -69,7 +81,7 @@ export default function BoardsWindow() {
                                                 toast.success("Board deleted successfully");
                                             }
                                         }}>
-                                            <IconTrash/>
+                                            <Trash2 />
                                         </button>
                                     </div>
                                 </div>

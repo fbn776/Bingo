@@ -10,6 +10,7 @@ import askForReplay from "./logic/askForReplay";
 import cancelReplayRequest from "./logic/cancelReplayRequest";
 import setupForGameReplay from "./logic/setupForGameReplay";
 import sendReaction from "./logic/sendReaction";
+import sendChat from "./logic/send-chat";
 
 
 export default function initGame(wss: WebSocket.Server) {
@@ -52,6 +53,10 @@ export default function initGame(wss: WebSocket.Server) {
                 case "reaction":
                     Logger.info(`Player ${data.by} reacted with ${data.emoji}`);
                     sendReaction(data);
+                    break;
+                case "chat":
+                    Logger.info(`Player ${data.by} says ${data.message}`);
+                    sendChat(data);
                     break;
                 default:
                     sendMsg<IErrorMsg>(ws, {
