@@ -10,12 +10,13 @@ import sendMsg, {mapUserBoardToBoardState} from "@/lib/utils.ts";
 import {
     ICancelReplay,
     IContinueToReplay,
-    IPlayerMove, IReaction,
+    IPlayerMove,
+    IReaction,
     IReplayGame,
     IReplayGameAck,
     ISayBingo
 } from "../../../../common/types.ts";
-import {ArrowLeft, RotateCcw} from "lucide-react";
+import {ArrowLeft, RotateCcw, Replace} from "lucide-react";
 import Confetti from 'react-confetti'
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
@@ -51,7 +52,7 @@ function HUD({youAre, guest, host, currentTurn}: {
 }
 
 export function MainGame() {
-    const {selectedBoard} = useAppCtx();
+    const {selectedBoard, setShowBoardsWindow} = useAppCtx();
     const {wonBy, currentTurn, guest, host, youAre, gameID, noOfBingo, currBoardState, setCurrCtx} = useCurrGameCtx();
     const navigate = useNavigate();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -129,22 +130,31 @@ export function MainGame() {
                 {wonBy === youAre && <Confetti/>}
 
 
-                <button className="shadow-2xl px-8 py-2 bg-blue-500 rounded-md text-center mt-8 flex gap-1"
-                        onClick={() => {
-                            setShowReplayWindow(true);
-                            setIsWaiting(true);
-                            sendMsg<IReplayGame>(ws!, {
-                                type: "replay-game",
-                                by: youAre!,
-                                gameID
-                            })
-                        }}
+                <button
+                    className="gap-3 mt-8 mb-6 shadow-2xl px-8 py-2 bg-blue-500 rounded-md text-center flex"
+                    onClick={() => {
+                        setShowReplayWindow(true);
+                        setIsWaiting(true);
+                        sendMsg<IReplayGame>(ws!, {
+                            type: "replay-game",
+                            by: youAre!,
+                            gameID
+                        })
+                    }}
                 >
-                    <RotateCcw />
+                    <RotateCcw/>
                     Replay
                 </button>
-
-                <Link to="/" className="px-4 py-2 bg-red-500 rounded-md text-center mt-5 flex gap-1">
+                <button
+                    className="gap-3 shadow-2xl px-8 py-2 bg-blue-500 rounded-md text-center flex"
+                    onClick={() => {
+                        setShowBoardsWindow(true);
+                    }}
+                >
+                    <Replace />
+                    Change Board
+                </button>
+                <Link to="/" className="px-4 py-2 bg-red-500 rounded-md text-center mt-5 flex gap-3">
                     <ArrowLeft/> Home
                 </Link>
             </div>
@@ -180,7 +190,7 @@ export function MainGame() {
                             </h1>
                             <hr/>
                             <p className="mt-4">
-                                Febin asks if you want to replay the game. Do you want to replay the game?
+                                Hey, up for a rematch?
                             </p>
                             <button className="mt-7 w-full rounded-md bg-blue-500 py-2 text-white mb-3" onClick={() => {
                                 sendMsg<IReplayGameAck>(ws!, {

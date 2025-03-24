@@ -23,7 +23,7 @@ export default function ChatPanel() {
 
 
     useEffect(() => {
-        if(showChat) {
+        if (showChat) {
             setUnreadMsg([]);
         }
 
@@ -41,8 +41,10 @@ export default function ChatPanel() {
                     sender: data.by === youAre ? "you" : "other"
                 }]);
 
+                if (navigator.vibrate)
+                    navigator.vibrate(200);
+
                 if (btnRef.current) {
-                    console.log("shake");
                     btnRef.current.classList.add("shake");
                 }
             }
@@ -140,9 +142,10 @@ export default function ChatPanel() {
             >
                 <ChatIcon/>
 
-                {!showChat && unreadMsg.length !== 0 && <div className="bg-red-500 absolute -top-1 -right-1 rounded-full text-white px-1">
-                    {unreadMsg.length > 4 ? "4+" : unreadMsg.length}
-                </div>}
+                {!showChat && unreadMsg.length !== 0 &&
+                    <div className="bg-red-500 absolute -top-1 -right-1 rounded-full text-white px-1">
+                        {unreadMsg.length > 4 ? "4+" : unreadMsg.length}
+                    </div>}
             </button>
         </div>
     )
