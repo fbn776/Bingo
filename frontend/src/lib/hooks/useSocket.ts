@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {WEBSOCKET_URL} from "@/lib/data.ts";
+import {WEBSOCKET_URL} from "@/data/data.ts";
 import {gameEvents} from "@/logic/init.ts";
 import {IInformPlayersMove, IMessage, IWonBingo} from "../../../../common/types.ts";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";

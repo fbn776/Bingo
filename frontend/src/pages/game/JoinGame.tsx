@@ -1,6 +1,6 @@
 import sendMsg, {mapUserBoardToBoardState} from "@/lib/utils.ts";
 import {IJoinMsg} from "../../../../common/types.ts";
-import {DEFAULT_BOARD} from "@/lib/data.ts";
+import {DEFAULT_BOARD} from "@/data/data.ts";
 import {gameEvents} from "@/logic/init.ts";
 import {toast} from "sonner";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";

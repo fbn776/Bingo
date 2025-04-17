@@ -1,6 +1,6 @@
 import {ReactNode, useState} from "react";
 import {CurrGameCtx, ICurrGame} from "@/lib/context/currentGame/useCurrGameCtx.ts";
-import {DEFAULT_BOARD_STATE} from "@/lib/data.ts";
+import {DEFAULT_BOARD_STATE} from "@/data/data.ts";
 import {TLocalBoardCell} from "../../../../../common/types.ts";
 
 export function CurrentGameCtxProvider({children}: {

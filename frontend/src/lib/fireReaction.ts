@@ -1,6 +1,7 @@
 import {confetti} from "@tsparticles/confetti";
 import {getRandomNumber} from "@/lib/utils.ts";
-import {REACTION_EMOJI} from "@/lib/data.ts";
+
+import {REACTION_EMOJI} from "@/data/REACTION_EMOJI.ts";
 
 /*
 "shape": {
