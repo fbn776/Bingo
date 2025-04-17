@@ -146,8 +146,12 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                                   by: youAre!
                               });
 
-                              desktopInput.current?.focus();
                               (e.target as HTMLFormElement).reset();
+
+                              if (desktopInput.current) {
+                                  desktopInput.current.value = "";
+                                  desktopInput.current.focus();
+                              }
                           }}>
                         <input className="flex-1 pl-6 pr-3 py-4 rounded-full w-[calc(100%-40px)]"
                                placeholder="Enter message" name="message" id="desktopViewInput" ref={desktopInput}/>
