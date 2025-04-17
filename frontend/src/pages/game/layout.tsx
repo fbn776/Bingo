@@ -5,6 +5,8 @@ import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 export default function Layout() {
     const {socketConnectionStatus} = useSocketCtx();
 
+
+
     return <>
         <main className="size-full">
             {socketConnectionStatus !== "connected" &&

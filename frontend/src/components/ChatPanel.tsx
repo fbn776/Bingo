@@ -91,8 +91,6 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                 behavior: 'smooth'
             });
         }
-
-        console.log(bottomScrollMobileRef.current)
     }, [messages]);
 
     return (
@@ -112,7 +110,8 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
 
                         ref={bottomScrollMobileRef}
                     >
-                        {messages.length === 0 ? <p className="w-full text-center text-black/60">No messages found!</p> :
+                        {messages.length === 0 ?
+                            <p className="w-full text-center text-black/60">No messages found!</p> :
                             <>
                                 {messages.map((msg) => {
                                     return <div
@@ -157,7 +156,8 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                 </div> :
                 <Drawer open={showChat} onOpenChange={setShowChat}>
                     <DrawerContent className="flex flex-col h-[50%] pb-3 px-3 pt-0">
-                        <div className="mt-3 pb-3 flex-1 overflow-y-auto scrollbar-hidden space-y-4 text-white" id="testMainCont" ref={bottomScrollMobileRef}>
+                        <div className="mt-3 pb-3 flex-1 overflow-y-auto scrollbar-hidden space-y-4 text-white"
+                             id="testMainCont" ref={bottomScrollMobileRef}>
                             {messages.length === 0 ?
                                 <p className="w-full text-center text-black/60">No messages found!</p> :
                                 <>
@@ -176,24 +176,25 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                                 </>
                             }
                         </div>
-                        <form className="shadow w-full flex bg-gray-200 rounded-full overflow-hidden relative items-center"
-                              onSubmit={(e) => {
-                                  e.preventDefault();
-                                  const formData = new FormData(e.target as HTMLFormElement);
-                                  const message = formData.get("message") as string;
+                        <form
+                            className="shadow w-full flex bg-gray-200 rounded-full overflow-hidden relative items-center"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                const formData = new FormData(e.target as HTMLFormElement);
+                                const message = formData.get("message") as string;
 
-                                  if (message.trim() === "") return;
-                                  setMessages(p => [...p, {message, sender: "you"}]);
+                                if (message.trim() === "") return;
+                                setMessages(p => [...p, {message, sender: "you"}]);
 
-                                  sendMsg<IChatMsg>(ws!, {
-                                      gameID: gameID,
-                                      message: message,
-                                      type: "chat",
-                                      by: youAre!
-                                  });
+                                sendMsg<IChatMsg>(ws!, {
+                                    gameID: gameID,
+                                    message: message,
+                                    type: "chat",
+                                    by: youAre!
+                                });
 
-                                  (e.target as HTMLFormElement).reset();
-                              }}>
+                                (e.target as HTMLFormElement).reset();
+                            }}>
                             <input className="bg-inherit flex-1 pl-6 pr-3 py-4 rounded-full w-[calc(100%-40px)]"
                                    placeholder="Enter message" name="message"/>
                             <button className="w-[40px] flex hover:text-blue-500">
