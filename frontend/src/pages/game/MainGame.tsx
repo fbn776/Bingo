@@ -16,13 +16,12 @@ import {
     IReplayGameAck,
     ISayBingo
 } from "../../../../common/types.ts";
-import {ArrowLeft, RotateCcw, Replace} from "lucide-react";
+import {ArrowLeft, Replace, RotateCcw} from "lucide-react";
 import Confetti from 'react-confetti'
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
-import ReactionPanel from "@/components/ReactionPanel.tsx";
 import fireReaction from "@/lib/fireReaction.ts";
-import ChatPanel from "@/components/ChatPanel.tsx";
+import {BottomPanel} from "@/pages/game/BottomPanel.tsx";
 
 function HUD({youAre, guest, host, currentTurn}: {
     youAre: "guest" | "host",
@@ -150,7 +149,7 @@ export function MainGame() {
                         setShowBoardsWindow(true);
                     }}
                 >
-                    <Replace />
+                    <Replace/>
                     Change Board
                 </button>
                 <Link to="/" className="px-4 py-2 bg-red-500 rounded-md text-center mt-5 flex gap-3">
@@ -285,10 +284,7 @@ export function MainGame() {
                 }
             </div>
 
-            <div className="w-full text-right pb-3 pr-3 flex flex-col gap-2 items-end">
-                <ReactionPanel/>
-                <ChatPanel/>
-            </div>
+            <BottomPanel/>
         </div>
 
         {dialogOpen && <GameCreateDialog setClose={setDialogOpen}/>}

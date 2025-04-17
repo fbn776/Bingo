@@ -14,3 +14,7 @@ This is the frontend for the Bingo multiplayer game.
     ```
     > For special cases, see [Special](./docs/sepcial.md)
 5. Run `npm run dev`/`pnpm run dev`... to start the development server.
+
+## Credits
+
+- Notification Sound Effect by <a href="https://pixabay.com/users/rasoolasaad-47313572/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=269296">Rasool Asaad</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=269296">Pixabay</a>

@@ -6,21 +6,30 @@ import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import {gameEvents} from "@/logic/init.ts";
 import {IChatMsg} from "../../../common/types.ts";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
+import {StateSetter} from "@/lib/types.ts";
 
 interface ChatMsg {
     message: string;
     sender: "you" | "other";
 }
 
-export default function ChatPanel() {
+export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
+    showChat: boolean, setShowChat: StateSetter<boolean>,
+    setShowReaction: StateSetter<boolean>
+}) {
     const bottomScrollRef = useRef<HTMLDivElement>(null);
     const {ws} = useSocketCtx();
     const {youAre, gameID, guest, host} = useCurrGameCtx();
-    const [showChat, setShowChat] = useState(false);
     const [messages, setMessages] = useState<ChatMsg[]>([]);
     const [unreadMsg, setUnreadMsg] = useState<ChatMsg[]>([]);
     const btnRef = useRef<HTMLButtonElement>(null);
 
+    const ringRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        ringRef.current = new Audio('/ring.mp3');
+        ringRef.current.preload = 'auto';
+    }, []);
 
     useEffect(() => {
         if (showChat) {
@@ -47,6 +56,8 @@ export default function ChatPanel() {
                 if (btnRef.current) {
                     btnRef.current.classList.add("shake");
                 }
+            } else {
+                ringRef.current?.play();
             }
         });
 
@@ -137,7 +148,14 @@ export default function ChatPanel() {
                     showChat && "bg-blue-500 text-white",
                 )}
                 onClick={() => {
-                    setShowChat(p => !p)
+                    setShowReaction(p => {
+                        if (p) {
+                            return false;
+                        } else {
+                            return false;
+                        }
+                    });
+                    setShowChat(p => !p);
                 }}
             >
                 <ChatIcon/>
