@@ -82,6 +82,10 @@ export default function useSocket(events: typeof gameEvents) {
             console.error("WebSocket error:", e);
         };
 
+        if (ws.readyState === WebSocket.OPEN) {
+            setSocketConnectionStatus('connected');
+        }
+
         ws.addEventListener("open", handleOpen);
         ws.addEventListener("message", handleMessage);
         ws.addEventListener("close", handleClose);

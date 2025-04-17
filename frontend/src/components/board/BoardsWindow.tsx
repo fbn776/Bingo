@@ -13,8 +13,6 @@ export default function BoardsWindow() {
     const {boards, setBoards, selectedBoard, setSelectedBoard, showBoardsWindow, setShowBoardsWindow} = useAppCtx();
     const [editData, setEditData] = useState<TBoard | null>(null);
 
-    console.log("BoardsWindow", {boards, selectedBoard, showBoardsWindow});
-
     useEffect(() => {
         if (!selectedBoard) {
             toast.info("Select or create a board to start playing");

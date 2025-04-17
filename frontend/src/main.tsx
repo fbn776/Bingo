@@ -18,7 +18,7 @@ import CheckForServer from "@/components/CheckForServer.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <Toaster richColors theme="light"/>
+        <Toaster richColors theme="light" position="bottom-left"/>
         <AppCtxProvider>
             <BrowserRouter>
                 <Routes>
