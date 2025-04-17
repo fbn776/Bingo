@@ -5,7 +5,7 @@ import CopyIcon from "@/components/icons/CopyIcon.tsx";
 import RetryIcon from "@/components/icons/RetryIcon.tsx";
 import Spinner from "@/components/ui/spinner.tsx";
 import {ICreateMsg} from "../../../../common/types.ts";
-import {DEFAULT_BOARD} from "@/lib/data.ts";
+import {DEFAULT_BOARD} from "@/data/data.ts";
 import {gameEvents} from "@/logic/init.ts";
 import {useAppCtx} from "@/lib/context/app/useAppCtx.ts";
 import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";

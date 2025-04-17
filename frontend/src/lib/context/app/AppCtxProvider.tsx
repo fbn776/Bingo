@@ -1,6 +1,6 @@
 import {ReactNode, useEffect, useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
-import { STORE_KEY} from "@/lib/data.ts";
+import { STORE_KEY} from "@/data/data.ts";
 import {TBoard, UseAppCtx} from "@/lib/context/app/useAppCtx.ts";
 
 export function AppCtxProvider({children}: {

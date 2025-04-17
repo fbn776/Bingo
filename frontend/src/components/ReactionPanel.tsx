@@ -3,9 +3,9 @@ import useCurrGameCtx from "@/lib/context/currentGame/useCurrGameCtx.ts";
 import useSocketCtx from "@/lib/context/socket/useSocketCtx.ts";
 import sendMsg from "@/lib/utils.ts";
 import {IReaction} from "../../../common/types.ts";
-import {REACTION_EMOJI} from "@/lib/data.ts";
 import fireReaction from "@/lib/fireReaction.ts";
 import {Smile} from "lucide-react";
+import {REACTION_EMOJI} from "@/data/REACTION_EMOJI.ts";
 
 const EMOJI_KEYS = Object.keys(REACTION_EMOJI);
 
