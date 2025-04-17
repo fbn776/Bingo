@@ -145,10 +145,11 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                                   by: youAre!
                               });
 
+                              (e.target as HTMLFormElement).getElementById('desktopViewInput').focus();
                               (e.target as HTMLFormElement).reset();
                           }}>
                         <input className="flex-1 pl-6 pr-3 py-4 rounded-full w-[calc(100%-40px)]"
-                               placeholder="Enter message" name="message"/>
+                               placeholder="Enter message" name="message" id="desktopViewInput"/>
                         <button className="w-[40px] flex hover:text-blue-500">
                             <Send/>
                         </button>
@@ -193,10 +194,11 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                                     by: youAre!
                                 });
 
+                                (e.target as HTMLFormElement).getElementById('mobileViewInput').focus();
                                 (e.target as HTMLFormElement).reset();
                             }}>
                             <input className="bg-inherit flex-1 pl-6 pr-3 py-4 rounded-full w-[calc(100%-40px)]"
-                                   placeholder="Enter message" name="message"/>
+                                   placeholder="Enter message" name="message" id="mobileViewInput"/>
                             <button className="w-[40px] flex hover:text-blue-500">
                                 <Send/>
                             </button>
@@ -220,7 +222,17 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                             return false;
                         }
                     });
-                    setShowChat(p => !p);
+
+                    setShowChat(p => {
+                        if(p) {
+                            return false;
+                        }
+
+                        document.getElementById('desktopViewInput')?.focus();
+                        document.getElementById('mobileViewInput')?.focus();
+
+                        return true;
+                    });
                 }}
             >
                 <ChatIcon/>
