@@ -23,7 +23,8 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
 }) {
     const bottomScrollRef = useRef<HTMLDivElement>(null);
     const bottomScrollMobileRef = useRef<HTMLDivElement>(null);
-
+    const mobileInput = useRef<HTMLInputElement>(null);
+    const desktopInput = useRef<HTMLInputElement>(null);
     const [messages, setMessages] = useState<ChatMsg[]>([]);
     const [unreadMsg, setUnreadMsg] = useState<ChatMsg[]>([]);
     const btnRef = useRef<HTMLButtonElement>(null);
@@ -145,11 +146,11 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                                   by: youAre!
                               });
 
-                              (e.target as HTMLFormElement).getElementById('desktopViewInput').focus();
+                              desktopInput.current?.focus();
                               (e.target as HTMLFormElement).reset();
                           }}>
                         <input className="flex-1 pl-6 pr-3 py-4 rounded-full w-[calc(100%-40px)]"
-                               placeholder="Enter message" name="message" id="desktopViewInput"/>
+                               placeholder="Enter message" name="message" id="desktopViewInput" ref={desktopInput}/>
                         <button className="w-[40px] flex hover:text-blue-500">
                             <Send/>
                         </button>
@@ -194,11 +195,11 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                                     by: youAre!
                                 });
 
-                                (e.target as HTMLFormElement).getElementById('mobileViewInput').focus();
+                                mobileInput.current?.focus();
                                 (e.target as HTMLFormElement).reset();
                             }}>
                             <input className="bg-inherit flex-1 pl-6 pr-3 py-4 rounded-full w-[calc(100%-40px)]"
-                                   placeholder="Enter message" name="message" id="mobileViewInput"/>
+                                   placeholder="Enter message" name="message" ref={mobileInput}/>
                             <button className="w-[40px] flex hover:text-blue-500">
                                 <Send/>
                             </button>
@@ -223,16 +224,12 @@ export default function ChatPanel({showChat, setShowChat, setShowReaction}: {
                         }
                     });
 
-                    setShowChat(p => {
-                        if(p) {
-                            return false;
-                        }
+                    if (!showChat) {
+                        mobileInput.current?.focus();
+                        desktopInput.current?.focus();
+                    }
 
-                        document.getElementById('desktopViewInput')?.focus();
-                        document.getElementById('mobileViewInput')?.focus();
-
-                        return true;
-                    });
+                    setShowChat(p => !p);
                 }}
             >
                 <ChatIcon/>
