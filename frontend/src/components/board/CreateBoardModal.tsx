@@ -144,7 +144,7 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                     return <div key={j} className="relative rounded overflow-hidden">
                         {editMode &&
                             <div
-                                className="absolute inset-0 hover:bg-black hover:bg-opacity-60"
+                                className={cn("absolute inset-0 hover:bg-black/40", editMode && boardPattern[j] && "bg-green-500/40 hover:bg-green-400/60")}
                                 onClick={() => {
                                     if (boardPattern[j])
                                         return;
@@ -167,10 +167,10 @@ export function CreateBoardModal({dialogOpen, setDialogOpen, setBoards, edit, se
                                 setBoardError(EMPTY_ERRORS);
                             }}
                             disabled={editMode}
-                            placeholder={`${j + 1}`} required
+                            placeholder={editMode ? undefined : `${j + 1}`} required
                             className={
                                 cn(boardError[j],
-                                    "border-2 text-center flex aspect-square w-[60px] max-sm:w-[40px] disabled:bg-gray-200"
+                                    "border-2 text-center flex aspect-square w-[60px] max-sm:w-[40px] disabled:bg-gray-200",
                                 )
                             }
                             max={25} min={1} type="number"
