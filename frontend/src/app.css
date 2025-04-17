@@ -162,3 +162,7 @@
 .shake {
     animation: anim-shake-pulse 0.5s;
 }
+
+canvas {
+    pointer-events: none !important;
+}

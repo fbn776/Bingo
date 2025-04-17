@@ -60,7 +60,7 @@ export default function BoardsWindow() {
                                             }
                                         }}
                                                 className={`hover:text-red-500 ${isSelected ? 'text-red-500' : 'text-black'}`}>
-                                            {isSelected ? <Heart className="fill-red-500" /> : <Heart />}
+                                            {isSelected ? <Heart className="fill-red-500"/> : <Heart/>}
                                         </button>
 
                                         <button className="hover:text-blue-500" onClick={() => {
@@ -81,7 +81,7 @@ export default function BoardsWindow() {
                                                 toast.success("Board deleted successfully");
                                             }
                                         }}>
-                                            <Trash2 />
+                                            <Trash2/>
                                         </button>
                                     </div>
                                 </div>
@@ -98,11 +98,12 @@ export default function BoardsWindow() {
                 </button>
             </div>
         </main>
-        <CreateBoardModal dialogOpen={dialogOpen}
-                          setDialogOpen={setDialogOpen}
-                          setBoards={setBoards}
-                          edit={editData}
-                          setEdit={setEditData}
+        <CreateBoardModal
+            dialogOpen={dialogOpen}
+            setDialogOpen={setDialogOpen}
+            setBoards={setBoards}
+            edit={editData}
+            setEdit={setEditData}
         />
     </>
 }

@@ -100,7 +100,6 @@ export function MainGame() {
 
         const ID4 = gameEvents.on('reaction', (e) => {
             const data = e.detail.data as IReaction;
-            console.log("EMOJI_DATA:", data);
             fireReaction("right", data.emoji, 1, 500);
         })
 
