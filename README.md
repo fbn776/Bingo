@@ -23,11 +23,11 @@ game.
 - [Motivation](#Motivation)
 - [Features](#Features)
 - [Tech Stack](#tech-stack)
-  - [Frontend](#frontend)
-  - [Backend](#backend)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
 - [Local Setup](#local-setup)
-  - [Frontend](#frontend-1)
-  - [Backend](#backend-1)
+    - [Frontend](#frontend-1)
+    - [Backend](#backend-1)
 - [Final Thoughts](#final-thoughts)
 
 ## Motivation
@@ -38,7 +38,7 @@ myself it would be fun and much easier to play the same, but on a phone.
 And at the same time I was searching for my next side project. I knew I had to use websockets for
 this and I haven't used websockets before. So I thought this would be very interesting and it was.
 
-When I cam back to my room I created a mono repo with the backend and frontend. Initialized the frontend with react and
+When I came back to my room I created a mono repo with the backend and frontend. Initialized the frontend with react and
 backend in express. Both using typescript. Progress was very slow (was preoccupied with other things) I worked on this
 on mostly on the weekends.
 
@@ -71,8 +71,45 @@ on mostly on the weekends.
 
 ## Local Setup
 
-### Frontend
+To locally host or develop this project;
+
+- Clone the GitHub repo
 
 ### Backend
+
+1. Open the `backend` directory
+    ```shell
+   cd backend
+   ```
+2. Create a `.env` file and inside it populate with;
+    ```dotenv
+    PORT=3000
+    ```
+3. Install dependencies
+    ```shell
+    npm install
+    ```
+4. Start the dev server
+    ```shell
+    npm run dev
+    ```
+   The frontend will be available at [http://localhost:3000/](http://localhost:3000/) (This might be different, it depends on the value of `PORT` in `.env` file)
+
+### Frontend
+
+1. Open the `frontend` directory
+    ```shell
+    cd frontend
+    ```
+2. Install dependencies
+    ```shell
+    npm install
+    ```
+3. Start the dev server
+    ```shell
+    npm run dev
+    ```
+   The frontend will be available at [http://localhost:5173/](http://localhost:5173/) (This might be different, if the
+   port is unavailable)
 
 ## Final Thoughts
