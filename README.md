@@ -18,6 +18,8 @@ Once each letter of BINGO is fully crossed out, the player has to call out BINGO
 game.
 </details>
 
+Read the blog [here]() to learn more about the game and how I built it.
+
 ## Table of Contents
 
 - [Motivation](#Motivation)
