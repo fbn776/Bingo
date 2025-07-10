@@ -37,6 +37,13 @@ export default function Home() {
                             Board
                         </button>
 
+                        <a
+                            href="https://fbn776.hashnode.dev/how-i-built-a-multiplayer-bingo-game"
+                            className="primary-button w-[180px]"
+                        >
+                            Read the blog
+                        </a>
+
 
                         <button
                             onClick={() => {
@@ -45,6 +52,8 @@ export default function Home() {
                             className="aspect-square rounded-full shadow-xl fixed top-4 right-4 bg-custom-primary text-white p-3 hover:scale-110 transition-transform">
                             <User/>
                         </button>
+
+
                     </div>
                 </div>
             </main>

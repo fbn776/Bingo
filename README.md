@@ -18,7 +18,7 @@ Once each letter of BINGO is fully crossed out, the player has to call out BINGO
 game.
 </details>
 
-Read the blog [here]() to learn more about the game and how I built it.
+Read the blog [here](https://fbn776.hashnode.dev/how-i-built-a-multiplayer-bingo-game) to learn more about the game and how I built it.
 
 ## Table of Contents
 
